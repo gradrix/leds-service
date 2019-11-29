@@ -1,5 +1,3 @@
-#!/usr/bin/python3.5
-
 import sys
 import asyncore
 import socket
@@ -40,6 +38,7 @@ class DevNullHandler(asyncore.dispatcher_with_send):
         return self.data
 
 class Server(asyncore.dispatcher):
+
     handler = DevNullHandler
 
     def __init__(self, host, port, callBack):
@@ -54,7 +53,6 @@ class Server(asyncore.dispatcher):
     def handle_accept(self):
         try:
             pair = self.accept()
-        
             if pair is not None:
                 sock, addr = pair
                 sock.settimeout(10)

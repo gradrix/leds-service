@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/local/bin/python3.7
 
 import threading
 from leds import Leds

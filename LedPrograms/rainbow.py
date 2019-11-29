@@ -1,16 +1,26 @@
-#!/usr/bin/python
-
 import time
 from neopixel import *
+from LedPrograms.ledprogrambase import *
 
 TH = 3
 
-class Rainbow:
+class Rainbow(LedProgramBase):
     
-    def __init__(self, settings):
-        self.settings = settings
-    
-    #Define functions which animate LEDs in various ways...
+    #Constructor
+    def __init__(self, settings, leds):
+      super().__init__(settings, leds)
+    #end
+
+    #LedProgramBase implementation
+    modeIndex = 1
+    modeName = "Rainbow"
+
+    def show(self, settings = None):
+        if (settings != None):
+            self.settings = settings
+        self.rainbow()
+    #end
+   
     def wheel(self, pos):
         """Generate rainbow colors across 0-255 positions."""
         if pos < 85:
@@ -30,7 +40,4 @@ class Rainbow:
             self.settings.strip.show()
             time.sleep(1 / (self.settings.speed))
     
-    def show(self, settings = None):
-        if (settings != None):
-            self.settings = settings
-        self.rainbow()
+

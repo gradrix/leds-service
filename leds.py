@@ -1,12 +1,9 @@
-#!/usr/bin/python3.5
-
 import time
 import sys
 import neopixel
 import board
-from LedPrograms.rainbow import Rainbow
-from LedPrograms.colliders import Colliders
 from ledsettings import LedSettings
+from ledprogramrepository import LedProgramRepository
 
 # LED strip configuration:
 LED_COUNT       = 360       # Number of LED pixels
@@ -21,8 +18,7 @@ class Leds:
         self.settings.ledCount = LED_COUNT
         self.settings.openFromFile()
         self.leds = neopixel.NeoPixel(LED_PIN, LED_COUNT, auto_write=False,pixel_order=neopixel.RGB)
-        self.rainbow = Rainbow(self.settings)
-        self.colliders = Colliders(self.settings, self.leds)
+        self.repo = LedProgramRepository(self.settings, self.leds)
 
     #Making changes
     def change(self, command):
@@ -37,14 +33,16 @@ class Leds:
             value = command.replace("O:", "")
             if (value == "0"):
                 self.leds.brightness = 0
+                self.leds.fill((0, 0, 0))
                 self.settings.isOn = False
             else:
                 self.leds.brightness = self.settings.brightness * 0.01
                 self.settings.isOn = True
         #Mode
         elif (command.find("M:") != -1):
-            value = command.replace("M:", "")
-            self.settings.mode = int(value)
+            value = int(command.replace("M:", ""))
+            if (self.repo.tryChangeMode(value)):
+              self.settings.mode = value
         #Toggle
         elif (command.find("T:") != -1):
             value = command.replace("T:", "")
@@ -62,11 +60,6 @@ class Leds:
 
     def show(self):
         if (self.settings.isOn):
-            mode = self.settings.mode
-            self.colliders.show()
-            #if (mode == 0):
-            #    self.rainbow.show(self.settings)
-            #elif (mode == 1):
-             #    self.colliders.show(self.settings)
+            self.repo.show()
         else:
           time.sleep(5)

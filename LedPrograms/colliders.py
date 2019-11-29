@@ -1,65 +1,39 @@
-#!/usr/bin/python
-
-from neopixel import *
 import random
 import datetime
+from neopixel import *
+from LedPrograms.ledprogrambase import *
 
 MIN_SIZE = 5
 MAX_SIZE = 15
 OBJ_AMOUNT = 15
 
-class Color:
+class Colliders(LedProgramBase):
     
-    def __init__(self, r, g, b):
-        self.r = r
-        self.g = g
-        self.b = b
-
-    def toRGB(self):
-      return (self.r, self.g, self.b)
-
-class Stick:
-
-    def __init__(self, startPos, size, ledCount):
-        self.size = size
-        self.ledCount = ledCount
-        self.startPos = startPos
-        self.endPos = self.startPos + size
-        self.velocity = random.randint(1000,8000)
-        self.direction = bool(random.getrandbits(1))
-        self.lastMove = datetime.datetime.now()
-        self.setRandomColor()
-
-    def edgeDetection(self):
-        if ((self.startPos <= 0 and not self.direction) or (self.endPos >= self.ledCount and self.direction)):
-            self.direction = not self.direction
-
-    def setRandomColor(self):
-        self.color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-
-    def step(self):
-        timeDelta = datetime.datetime.now() - self.lastMove
-        millSecs = int(timeDelta.total_seconds() * 1000)
-        if (millSecs > self.velocity):
-            self.edgeDetection()
-
-            if (self.direction):
-                self.startPos += 1
-                self.endPos += 1
-            else:
-                self.startPos -= 1
-                self.endPos -= 1
-            self.lastMove = datetime.datetime.now()
-
-class Colliders:
-    
+    #Constructor
     def __init__(self, settings, leds):
-        self.settings = settings
-        self.leds = leds
+        super().__init__(settings, leds)
         self.sticks = []
-    
+
         for i in range(OBJ_AMOUNT):
             self.spawnSingle()
+    #end
+
+    #LedProgramBase implementition
+    modeIndex = 0
+    modeName = "Colliders"
+
+    def show(self, settings = None):
+        if (settings != None):
+            self.settings = settings
+        self.step()
+    #end
+
+    def step(self):
+        for i, stick in enumerate(self.sticks):
+            self.collisionDetection(stick, i)
+            stick.step()
+        self.drawAll()
+        self.leds.show()
 
     def isSpaceAvailable(self, startPos, endPos):
         for stick in self.sticks:
@@ -120,14 +94,45 @@ class Colliders:
                 stick.setRandomColor()
                 cStick.setRandomColor() 
                     
-    def step(self):
-        for i, stick in enumerate(self.sticks):
-            self.collisionDetection(stick, i)
-            stick.step()
-        self.drawAll()
-        self.leds.show()
+class Stick:
 
-    def show(self, settings = None):
-        if (settings != None):
-            self.settings = settings
-        self.step()
+    def __init__(self, startPos, size, ledCount):
+        self.size = size
+        self.ledCount = ledCount
+        self.startPos = startPos
+        self.endPos = self.startPos + size
+        self.velocity = random.randint(1,300)
+        self.direction = bool(random.getrandbits(1))
+        self.lastMove = datetime.datetime.now()
+        self.setRandomColor()
+
+    def edgeDetection(self):
+        if ((self.startPos <= 0 and not self.direction) or (self.endPos >= self.ledCount and self.direction)):
+            self.direction = not self.direction
+
+    def setRandomColor(self):
+        self.color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+    def step(self):
+        timeDelta = datetime.datetime.now() - self.lastMove
+        millSecs = int(timeDelta.total_seconds() * 1000)
+        if (millSecs > self.velocity):
+            self.edgeDetection()
+
+            if (self.direction):
+                self.startPos += 1
+                self.endPos += 1
+            else:
+                self.startPos -= 1
+                self.endPos -= 1
+            self.lastMove = datetime.datetime.now()
+
+class Color:
+    
+    def __init__(self, r, g, b):
+        self.r = r
+        self.g = g
+        self.b = b
+
+    def toRGB(self):
+      return (self.r, self.g, self.b)

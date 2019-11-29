@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import pickle
 
 class LedSettings:
@@ -38,9 +36,8 @@ class LedSettings:
                 self.speed = loadedSettings["speed"]
         except Exception as e:
             print("Error while loading saved data: "+str(e))
-            self.brightness = 20
+            self.brightness = 50
             self.isOn = True
             self.mode = 0
             self.toggle = 0
             self.speed = 4             
-            print('Brightness: '+str(self.brightness))   
