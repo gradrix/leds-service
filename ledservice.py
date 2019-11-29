@@ -30,5 +30,5 @@ class LedService:
         while True:
             self.leds.show()
 
-ledSvc = LedService("localhost", "8080")
+ledSvc = LedService("localhost", "800")
 ledSvc.start()

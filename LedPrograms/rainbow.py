@@ -15,9 +15,7 @@ class Rainbow(LedProgramBase):
     modeIndex = 1
     modeName = "Rainbow"
 
-    def show(self, settings = None):
-        if (settings != None):
-            self.settings = settings
+    def show(self):
         self.rainbow()
     #end
    

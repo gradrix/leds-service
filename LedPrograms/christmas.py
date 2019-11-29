@@ -11,6 +11,6 @@ class Christmas(LedProgramBase):
   modeIndex = 2
   modeName = "Christmas"
 
-  def show(self, settings = None):
+  def show(self):
     pass
   #end

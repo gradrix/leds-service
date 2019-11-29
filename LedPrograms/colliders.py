@@ -1,4 +1,5 @@
 import random
+import time
 import datetime
 from neopixel import *
 from LedPrograms.ledprogrambase import *
@@ -23,17 +24,12 @@ class Colliders(LedProgramBase):
     modeName = "Colliders"
 
     def show(self, settings = None):
-        if (settings != None):
-            self.settings = settings
-        self.step()
-    #end
-
-    def step(self):
         for i, stick in enumerate(self.sticks):
             self.collisionDetection(stick, i)
             stick.step()
         self.drawAll()
         self.leds.show()
+    #end
 
     def isSpaceAvailable(self, startPos, endPos):
         for stick in self.sticks:
@@ -85,12 +81,17 @@ class Colliders(LedProgramBase):
                     currentDirection = cStick.direction
                     cStick.direction = not currentDirection
                     stick.direction = currentDirection
+                
                 currentLastMov = cStick.lastMove                
                 currentVelocity = cStick.velocity
+
                 cStick.velocity = stick.velocity
-                cStick.lastMove = stick.lastMove
                 stick.velocity = currentVelocity
+ 
+                cStick.lastMove = stick.lastMove
                 stick.lastMove = currentLastMov
+
+                #Setting random colors on impact
                 stick.setRandomColor()
                 cStick.setRandomColor() 
                     
