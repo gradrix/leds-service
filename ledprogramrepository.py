@@ -3,9 +3,9 @@ import inspect
 import os
 import glob
 from abc import ABC
-from LedPrograms.ledprogrambase import LedProgramBase
+from common.ledprogrambase import LedProgramBase
 
-LED_PROGRAMS_DIR = "LedPrograms"
+LED_PROGRAMS_DIR = "ledprograms"
 
 class LedProgramRepository:
 
@@ -22,24 +22,32 @@ class LedProgramRepository:
     programList = list(self.programs.items())
     programList.sort()
     self.programs = dict(programList)
+    if (self.settings.mode not in self.programs):
+      self.changeMode(self.settings.mode)
+    self.currentProgram = self.programs[self.settings.mode]
 
   def show(self):
-    mode = self.settings.mode
-    if (mode in self.programs):
-      self.programs[mode].show()
-    else:
-      self.settings.mode = self.tryChangeMode(0)
-  
-  def tryChangeMode(self, newMode):
-    isNext = true if self.mode < newMode else false
+    self.currentProgram.show()
+
+  def changeMode(self, newMode, setProgram = False):
+    isNext = True if self.settings.mode < newMode else False
+    mode = None
     if (isNext):
       for i in range(newMode, max(self.programs, key=int)):
         if (i in self.programs):
-          return i
+          mode = i
+          break
     else:
-      for i in range(min(self.programs, key=int), newMode):
+      for i in range(newMode, min(self.programs, key=int), -1):
         if (i in self.programs):
-          return i
+          mode = i
+          break
+    self.settings.mode = mode
+    if (setProgram):
+      self.currentProgram = self.programs[self.settings.mode]
+
+  def getModeLayout(self):
+    return self.currentProgram
 
   def add(self, ledProgram):
     if (ledProgram.modeIndex in self.programs):

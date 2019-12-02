@@ -1,4 +1,4 @@
-from LedPrograms.ledprogrambase import *
+from common.ledprogrambase import LedProgramBase
 
 class Christmas(LedProgramBase):
 
@@ -10,6 +10,8 @@ class Christmas(LedProgramBase):
   #LedProgramBase implementation
   modeIndex = 2
   modeName = "Christmas"
+  minSpeed = 0
+  maxSpeed = 100
 
   def show(self):
     pass

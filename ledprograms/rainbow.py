@@ -1,6 +1,6 @@
 import time
 from neopixel import *
-from LedPrograms.ledprogrambase import *
+from common.ledprogrambase import LedProgramBase
 
 TH = 3
 
@@ -14,6 +14,8 @@ class Rainbow(LedProgramBase):
     #LedProgramBase implementation
     modeIndex = 1
     modeName = "Rainbow"
+    minSpeed = 20
+    maxSpeed = 200
 
     def show(self):
         self.rainbow()

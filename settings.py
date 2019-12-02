@@ -1,6 +1,6 @@
 import pickle
 
-class LedSettings:
+class Settings:
     
     brightness = 0
     isOn = None

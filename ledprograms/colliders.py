@@ -1,8 +1,7 @@
 import random
 import time
 import datetime
-from neopixel import *
-from LedPrograms.ledprogrambase import *
+from common.ledprogrambase import LedProgramBase
 
 MIN_SIZE = 5
 MAX_SIZE = 15
@@ -14,7 +13,6 @@ class Colliders(LedProgramBase):
     def __init__(self, settings, leds):
         super().__init__(settings, leds)
         self.sticks = []
-
         for i in range(OBJ_AMOUNT):
             self.spawnSingle()
     #end
@@ -22,13 +20,16 @@ class Colliders(LedProgramBase):
     #LedProgramBase implementition
     modeIndex = 0
     modeName = "Colliders"
+    minSpeed = 0
+    maxSpeed = 100
 
-    def show(self, settings = None):
+    def show(self):
+        speed = (101 - self.settings.speed)
         for i, stick in enumerate(self.sticks):
             self.collisionDetection(stick, i)
-            stick.step()
+            stick.step(speed)
         self.drawAll()
-        self.leds.show()
+        self.refresh()
     #end
 
     def isSpaceAvailable(self, startPos, endPos):
@@ -61,10 +62,6 @@ class Colliders(LedProgramBase):
             for i in range(stick.startPos, stick.endPos):
                 if (i < len(self.leds) and i >= 0):
                   self.leds[i] = stick.color.toRGB()
-
-    def clear(self):
-        for i in range(0, self.settings.ledCount):
-            self.leds[i]= (0, 0, 0)
 
     def collisionDetection(self, cStick, currentIndex):
         for i, stick in enumerate(self.sticks):
@@ -114,9 +111,10 @@ class Stick:
     def setRandomColor(self):
         self.color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-    def step(self):
+    def step(self,speed):
         timeDelta = datetime.datetime.now() - self.lastMove
-        millSecs = int(timeDelta.total_seconds() * 1000)
+        millSecs = int(timeDelta.total_seconds() * 1000)        
+        #millSecs = int(timeDelta.total_seconds() * 1000 * speed))
         if (millSecs > self.velocity):
             self.edgeDetection()
 

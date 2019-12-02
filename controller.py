@@ -2,23 +2,25 @@ import time
 import sys
 import neopixel
 import board
-from ledsettings import LedSettings
+from settings import Settings
 from ledprogramrepository import LedProgramRepository
+from common.ledswrapper import LedsWrapper
 
 # LED strip configuration:
 LED_COUNT       = 360       # Number of LED pixels
 LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
 
-class Leds:
+class Controller(LedsWrapper):
     """
     Class full of stuff needed to control leds through RaspberyPi
     """
     def __init__(self):
-        self.settings = LedSettings(None)
+        self.settings = Settings(None)
         self.settings.ledCount = LED_COUNT
         self.settings.openFromFile()
-        self.leds = neopixel.NeoPixel(LED_PIN, LED_COUNT, auto_write=False,pixel_order=neopixel.RGB)
-        self.repo = LedProgramRepository(self.settings, self.leds)
+        leds = neopixel.NeoPixel(LED_PIN, LED_COUNT, auto_write = False, pixel_order = neopixel.RGB)
+        self.repo = LedProgramRepository(self.settings, leds)
+        super().__init__(leds = leds)
 
     #Making changes
     def change(self, command):
@@ -27,22 +29,19 @@ class Leds:
         if (command.find("B:") != -1):
             value = command.replace("B:", "")
             self.settings.brightness = int(value)
-            self.leds.brightness = self.settings.brightness * 0.01
+            self.changeBrightness(self.settings.brightness)
         #Switch ON/OFF
         elif (command.find("O:") != -1):
             value = command.replace("O:", "")
             if (value == "0"):
-                self.leds.brightness = 0
-                self.leds.fill((0, 0, 0))
                 self.settings.isOn = False
+                self.clear(True)
             else:
-                self.leds.brightness = self.settings.brightness * 0.01
                 self.settings.isOn = True
         #Mode
         elif (command.find("M:") != -1):
             value = int(command.replace("M:", ""))
-            if (self.repo.tryChangeMode(value)):
-              self.settings.mode = value
+            self.repo.changeMode(value)
         #Toggle
         elif (command.find("T:") != -1):
             value = command.replace("T:", "")
@@ -54,9 +53,9 @@ class Leds:
         
         self.settings.saveToFile()
         return self.settings
-    
-    def currentStatus(self):
-        return self.settings
+
+    def getModeLayout(self):
+        return self.repo.getModeLayout()
 
     def show(self):
         if (self.settings.isOn):
