@@ -29,7 +29,7 @@ class Colliders(LedProgramBase):
             self.collisionDetection(stick, i)
             stick.step(speed)
         self.drawAll()
-        self.refresh()
+        self.leds.refresh()
     #end
 
     def isSpaceAvailable(self, startPos, endPos):
@@ -57,10 +57,10 @@ class Colliders(LedProgramBase):
         self.sticks.pop()
 
     def drawAll(self):
-        self.clear()
+        self.leds.clear()
         for stick in self.sticks:
             for i in range(stick.startPos, stick.endPos):
-                if (i < len(self.leds) and i >= 0):
+                if (i < self.leds.getLength() and i >= 0):
                   self.leds[i] = stick.color.toRGB()
 
     def collisionDetection(self, cStick, currentIndex):

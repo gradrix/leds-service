@@ -1,0 +1,111 @@
+import curses
+import time
+import sys
+import threading
+from curses import wrapper
+from common.ledsbase import LedsBase
+from sty import bg, rs
+
+LED_OFF_CHAR = '□'
+LED_ON_CHAR = '■'
+
+class LedsTestWrapper(LedsBase):
+  
+  ledCount = 0
+
+  def __init__(self):
+    self.started = False
+    self.pixels = {}
+
+  def __getitem__(self, key):
+    return self.pixel[key]    
+
+  def __setitem__(self, key, value):
+    r = value[0]
+    g = value[1]
+    b = value[2]
+    self.pixels[key] = LED_ON_CHAR
+
+  #Curses specific helper methods
+  def start(self):
+    self.started = True
+    self.sc = curses.initscr()
+    wrapper(self.main)
+
+  def main(self, sc):
+    self.sc.clear()
+    self.sc.nodelay(1)
+    curses.noecho()
+
+  def print(self, x, y, text):
+    self.sc.addstr(x, y, text)  
+
+  def initialize(self, ledCount):
+    self.ledCount = ledCount
+    self.clear()
+
+  def clear(self, show = False):
+    for i in range(self.ledCount):
+      self.pixels[i] = LED_OFF_CHAR
+ 
+    if (show):
+      self.refresh()
+
+  def refresh(self):
+    self.show()
+
+  def fill(self, tupl):
+    self.clear()
+    pass
+
+  def getLength(self):
+    return self.ledCount  
+
+  def show(self):
+    if (not self.started):
+      return
+
+    maxX, maxY = self.sc.getmaxyx()
+    x = 0
+    y = 1
+
+    #print(maxX, maxY)
+
+    inverse = False
+    newLine = False
+    yChanged = False
+    
+    for i, pixel in enumerate(self.pixels):
+      if (y % 2 == 0 or newLine):
+        y = y + 1
+        yChanged = True
+        newLine = False
+      elif (inverse):
+        x = x - 1
+      else:
+        x = x + 1
+
+      self.print(y, x, self.pixels[i])
+      #print("X:"+str(x)+" Y:"+str(y)+" P:"+str(i))
+
+      if not yChanged:        
+        if x >= maxY - 1:
+          inverse = True
+          newLine = True
+        elif x <= 1 and inverse:
+          inverse = False
+          newLine = True
+      else:
+        yChanged = False
+
+    key = self.sc.getch()
+    if key == ord('q'):
+      curses.nocbreak()
+      curses.echo()
+      curses.endwin()
+      sys.exit()
+ 
+    time.sleep(0.01)
+
+  def changeBrightness(self, value):
+    pass

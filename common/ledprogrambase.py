@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod, abstractproperty
 from common.ledswrapper import LedsWrapper
 
-class LedProgramBase(ABC, LedsWrapper):
+class LedProgramBase(ABC):
 
   @abstractmethod
   def __init__(self, settings, leds):
     self.settings = settings
-    super().__init__(leds = leds)
+    self.leds = leds
+    super().__init__()
 
   @abstractproperty
   def modeIndex(self):

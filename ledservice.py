@@ -1,15 +1,19 @@
 #!/usr/local/bin/python3.7
 
 import threading
+import builtins
 from controller import Controller
 from commandlistener import CommandListener
 
 class LedService:
 
-    def __init__(self, ip, port):
+    def __init__(self, ip, port, controller = None):
         self.ip = ip
         self.port = port
-        self.controller = Controller()
+        if (controller == None):
+          self.controller = Controller()
+        else:
+          self.controller = controller
 
     def processCommand(self, command):
         if (command == "ST"):
@@ -44,7 +48,9 @@ class LedService:
         thread.start()
 
         while True:
-            self.controller.show()
+          self.controller.show()
 
-ledSvc = LedService("localhost", "800")
-ledSvc.start()
+#Don't run LedService if we are testing it
+if (not hasattr(builtins, "IS_TEST_ENV") or builtins.IS_TEST_ENV == False):
+  ledSvc = LedService("localhost", "800")
+  ledSvc.start()

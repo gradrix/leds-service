@@ -1,6 +1,5 @@
 import time
 import sys
-import neopixel
 import board
 from settings import Settings
 from ledprogramrepository import LedProgramRepository
@@ -10,17 +9,25 @@ from common.ledswrapper import LedsWrapper
 LED_COUNT       = 360       # Number of LED pixels
 LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
 
-class Controller(LedsWrapper):
+class Controller():
     """
     Class full of stuff needed to control leds through RaspberyPi
     """
-    def __init__(self):
-        self.settings = Settings(None)
-        self.settings.ledCount = LED_COUNT
-        self.settings.openFromFile()
-        leds = neopixel.NeoPixel(LED_PIN, LED_COUNT, auto_write = False, pixel_order = neopixel.RGB)
+    def __init__(self, leds = None, settings = None):
+          
+        if (settings == None):
+          self.settings = Settings(None)
+          self.settings.ledCount = LED_COUNT
+          self.settings.openFromFile()
+        else:
+          self.settings = settings
+
+        if (leds == None):
+          leds = LedsWrapper(LED_PIN, LED_COUNT)
+        else:
+          leds = leds
+        self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
-        super().__init__(leds = leds)
 
     #Making changes
     def change(self, command):
@@ -29,13 +36,13 @@ class Controller(LedsWrapper):
         if (command.find("B:") != -1):
             value = command.replace("B:", "")
             self.settings.brightness = int(value)
-            self.changeBrightness(self.settings.brightness)
+            self.leds.changeBrightness(self.settings.brightness)
         #Switch ON/OFF
         elif (command.find("O:") != -1):
             value = command.replace("O:", "")
             if (value == "0"):
                 self.settings.isOn = False
-                self.clear(True)
+                self.leds.clear(True)
             else:
                 self.settings.isOn = True
         #Mode
@@ -59,6 +66,6 @@ class Controller(LedsWrapper):
 
     def show(self):
         if (self.settings.isOn):
-            self.repo.show()
+          self.repo.show()
         else:
           time.sleep(5)
