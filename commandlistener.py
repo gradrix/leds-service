@@ -34,7 +34,7 @@ class CommandHandler(asyncore.dispatcher):
 class CommandListener(asyncore.dispatcher):
 
     def __init__(self, host, port, callback):
-        print("Starting leds-service <-> leds-web TCP server on: "+str(host)+":"+str(port))
+        print("Starting leds-service <-s> leds-web TCP server on: "+str(host)+":"+str(port))
         self.callBack = callback
         asyncore.dispatcher.__init__(self)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -25,6 +25,10 @@ class LedProgramRepository:
     if (self.settings.mode not in self.programs):
       self.changeMode(self.settings.mode)
     self.currentProgram = self.programs[self.settings.mode]
+    #Log
+    print("Settings: isOn:"+str(self.settings.isOn)+" mode:"+str(self.settings.mode)+" toggle:"
+    +str(self.settings.toggle)+" speed:"+str(self.settings.speed)+" brightness:"+str(self.settings.brightness)+" ledCount:"+str(self.settings.ledCount))
+
 
   def show(self):
     self.currentProgram.show()
@@ -54,8 +58,7 @@ class LedProgramRepository:
       raise ValueError("Error. LedProgram of index '"+str(ledProgram.modeIndex)+"' already exists in LedProgramRepository")
     self.programs[ledProgram.modeIndex] = ledProgram
     
-  def importFromFolder(self, directoryPath, baseClass=None, filterAbstract=True):
-    
+  def importFromFolder(self, directoryPath, baseClass=None, filterAbstract=True):    
     programTypes = []
     currentDir = os.path.dirname(os.path.abspath(__file__))
     dirPath = os.path.join(currentDir, directoryPath)
