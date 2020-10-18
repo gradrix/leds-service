@@ -1,6 +1,7 @@
 import random
 import time
 import datetime
+from common.color import Color
 from common.ledprogrambase import LedProgramBase
 
 MIN_SIZE = 5
@@ -12,16 +13,19 @@ class Colliders(LedProgramBase):
     #Constructor
     def __init__(self, settings, leds):
         super().__init__(settings, leds)
-        self.sticks = []
-        for i in range(OBJ_AMOUNT):
-            self.spawnSingle()
+        self.initialize()
     #end
 
     #LedProgramBase implementition
-    modeIndex = 0
+    modeIndex = 1
     modeName = "Colliders"
     minSpeed = 0
     maxSpeed = 100
+
+    def initialize(self):
+        self.sticks = []
+        for i in range(OBJ_AMOUNT):
+            self.spawnSingle()
 
     def show(self):
         speed = (101 - self.settings.speed)
@@ -48,7 +52,11 @@ class Colliders(LedProgramBase):
             startPos = random.randint(0, self.settings.ledCount)
             spaceIsFree = self.isSpaceAvailable(startPos, startPos + size)
             if (spaceIsFree):
-                stick = Stick(startPos, size, self.settings.ledCount)
+                if (self.settings.color == ""):
+                    color = Color.generateRandom()
+                else:
+                    color = Color.fromHex(self.settings.color)
+                stick = Stick(startPos, size, self.settings.ledCount, color)
                 self.sticks.append(stick)
                 break
             retries -= 1
@@ -89,12 +97,13 @@ class Colliders(LedProgramBase):
                 stick.lastMove = currentLastMov
 
                 #Setting random colors on impact
-                stick.setRandomColor()
-                cStick.setRandomColor() 
+                if (self.settings.color == ""):
+                    stick.color = Color.generateRandom()
+                    cStick.color = Color.generateRandom()
                     
 class Stick:
 
-    def __init__(self, startPos, size, ledCount):
+    def __init__(self, startPos, size, ledCount, color):
         self.size = size
         self.ledCount = ledCount
         self.startPos = startPos
@@ -102,14 +111,11 @@ class Stick:
         self.velocity = random.randint(1,300)
         self.direction = bool(random.getrandbits(1))
         self.lastMove = datetime.datetime.now()
-        self.setRandomColor()
+        self.color = color
 
     def edgeDetection(self):
         if ((self.startPos <= 0 and not self.direction) or (self.endPos >= self.ledCount and self.direction)):
             self.direction = not self.direction
-
-    def setRandomColor(self):
-        self.color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def step(self,speed):
         timeDelta = datetime.datetime.now() - self.lastMove
@@ -125,13 +131,3 @@ class Stick:
                 self.startPos -= 1
                 self.endPos -= 1
             self.lastMove = datetime.datetime.now()
-
-class Color:
-    
-    def __init__(self, r, g, b):
-        self.r = r
-        self.g = g
-        self.b = b
-
-    def toRGB(self):
-      return (self.r, self.g, self.b)

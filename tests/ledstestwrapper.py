@@ -72,7 +72,7 @@ class LedsTestWrapper(LedsBase):
     maxY, maxX = self.sc.getmaxyx()
     x = 0
     y = 1
-    line = " " * maxX;
+    line = " " * maxX
     res = []
     for y in range(maxY):
       res.append(line)

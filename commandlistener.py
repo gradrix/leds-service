@@ -6,11 +6,40 @@ import time
 import signal
 import os
 
-class CommandHandler(asyncore.dispatcher):
+# -----------------------------
+# TCP Server to receive/send program commands
+# -----------------------------
+class CommandListenerTCPServer(asyncore.dispatcher):
+
+    def __init__(self, host, port, callback):
+        asyncore.dispatcher.__init__(self)
+        self.callBack = callback
+        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.set_reuse_addr()
+        self.bind((host, int(port)))
+        self.address = self.socket.getsockname()
+        print("Starting leds-service <-> leds-web TCP server on: "+str(host)+":"+str(port))
+        self.listen(5)
+
+    def handle_accept(self):
+        try:
+            pair = self.accept()
+            if pair is not None:
+                sock, addr = pair
+                sock.settimeout(10)
+                ClientHandler(sock, self.callBack) 
+        except Exception as e:
+            print("CommandListenerTCPServer Error: "+str(e))
+            pass
+
+    def startListening(self):
+        asyncore.loop()
+
+class ClientHandler(asyncore.dispatcher):
 
     def __init__(self, sock, callBack):
-      super().__init__(sock)      
-      self.callBack = callBack
+        self.callBack = callBack
+        asyncore.dispatcher.__init__(self, sock)
 
     def handle_read(self):
         try:
@@ -22,7 +51,7 @@ class CommandHandler(asyncore.dispatcher):
                 returnStr = self.callBack(dataStr)
                 self.send(returnStr.encode("ascii"))
         except Exception as e:
-            print("CommandHandler Error: "+str(e))
+            print("ClientHandler Error: "+str(e))
             pass
 
     def handle_close(self):
@@ -31,26 +60,3 @@ class CommandHandler(asyncore.dispatcher):
     def readable(self):
       return True
 
-class CommandListener(asyncore.dispatcher):
-
-    def __init__(self, host, port, callback):
-        print("Starting leds-service <-s> leds-web TCP server on: "+str(host)+":"+str(port))
-        self.callBack = callback
-        asyncore.dispatcher.__init__(self)
-        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.bind((host, int(port)))
-        self.listen(5)
-
-    def handle_accept(self):
-        try:
-            pair = self.accept()
-            if pair is not None:
-                sock, addr = pair
-                sock.settimeout(10)
-                handler = CommandHandler(sock, self.callBack) 
-        except Exception as e:
-            print("CommandListener Error: "+str(e))
-            pass
-
-    def startListening(self):
-        asyncore.loop(timeout = 10)

@@ -1,16 +1,22 @@
 import pickle
 
-class Settings:
-    
-    brightness = 0
-    isOn = None
-    mode = 0
-    toggle = 0
-    speed = 0
-    ledCount = 0
+class Settings: 
 
-    def __init__(self, strip):
-        self.strip = strip
+    def __init__(self):
+        self.loadDefaults()
+
+    def loadDefaults(self):
+        self.brightness = 0
+        self.isOn = None
+        self.mode = 0
+        self.toggle = 0
+        self.speed = 0
+        self.color = ""
+        self.ledCount = 0
+
+    def reset(self):
+        self.loadDefaults() 
+        self.saveToFile()
     
     def saveToFile(self):
         try:
@@ -21,6 +27,7 @@ class Settings:
                 settingsDict["mode"] = self.mode
                 settingsDict["toggle"] = self.toggle
                 settingsDict["speed"] = self.speed
+                settingsDict["color"] = self.color
                 pickle.dump(settingsDict, fi, pickle.HIGHEST_PROTOCOL)
         except Exception as e:
             print("Error while trying to save led settings: "+str(e))
@@ -34,10 +41,13 @@ class Settings:
                 self.mode = loadedSettings["mode"]
                 self.toggle = loadedSettings["toggle"]
                 self.speed = loadedSettings["speed"]
+                self.color = loadedSettings["color"]
         except Exception as e:
             print("Error while loading saved data: "+str(e))
             self.brightness = 50
             self.isOn = True
             self.mode = 0
             self.toggle = 0
-            self.speed = 4             
+            self.speed = 4
+            self.color = ""               
+            self.saveToFile()

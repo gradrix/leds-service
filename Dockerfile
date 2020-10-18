@@ -10,7 +10,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # define the port number the container should expose
-EXPOSE 800
+EXPOSE 9000
 
 # run the command
 CMD [ "python", "./ledservice.py" ]

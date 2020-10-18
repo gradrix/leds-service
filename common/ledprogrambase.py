@@ -28,3 +28,7 @@ class LedProgramBase(ABC):
   @abstractmethod
   def show(self):
     pass
+
+  @abstractmethod
+  def show(self):
+    pass

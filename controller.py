@@ -9,14 +9,14 @@ from common.ledswrapper import LedsWrapper
 LED_COUNT       = 360       # Number of LED pixels
 LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
 
+# -----------------------------
+# Controller which changes led behavour values based on received commands
+# -----------------------------
 class Controller():
-    """
-    Class full of stuff needed to control leds through RaspberyPi
-    """
     def __init__(self, leds = None, settings = None):
           
         if (settings == None):
-          self.settings = Settings(None)
+          self.settings = Settings()
           self.settings.ledCount = LED_COUNT
           self.settings.openFromFile()
         else:
@@ -28,13 +28,18 @@ class Controller():
           leds = leds
         self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
+        #print("Controller: O:"+str(self.settings.isOn)+ "O:"+str(self.settings.brightness)+ "S:"+str(self.settings.speed))
 
-    #Making changes
+    # -----------------------------
+    # Making led setting changes
+    # -----------------------------
     def change(self, command):
         value = None
         #Brightness
         if (command.find("B:") != -1):
             value = command.replace("B:", "")
+            if (int(value) > 100):
+              value = 100
             self.settings.brightness = int(value)
             self.leds.changeBrightness(self.settings.brightness)
         #Switch ON/OFF
@@ -47,8 +52,8 @@ class Controller():
                 self.settings.isOn = True
         #Mode
         elif (command.find("M:") != -1):
-            value = int(command.replace("M:", ""))
-            self.repo.changeMode(value)
+            value = command.replace("M:", "")
+            self.repo.changeMode(int(value), True)
         #Toggle
         elif (command.find("T:") != -1):
             value = command.replace("T:", "")
@@ -57,13 +62,23 @@ class Controller():
         elif (command.find("S:") != -1):
             value = command.replace("S:", "")
             self.settings.speed = int(value)
+        #Color
+        elif (command.find("C:") != -1):
+            value = command.replace("C:", "").strip()
+            self.settings.color = value
         
         self.settings.saveToFile()
         return self.settings
 
+    # -----------------------------
+    # Gets led program layout
+    # -----------------------------
     def getModeLayout(self):
         return self.repo.getModeLayout()
 
+    # -----------------------------
+    # Runs current program frame
+    # -----------------------------
     def show(self):
         if (self.settings.isOn):
           self.repo.show()
