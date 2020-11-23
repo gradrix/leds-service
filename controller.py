@@ -66,6 +66,7 @@ class Controller():
         elif (command.find("C:") != -1):
             value = command.replace("C:", "").strip()
             self.settings.color = value
+            self.repo.reinitializeLedProgram()
         
         self.settings.saveToFile()
         return self.settings

@@ -55,7 +55,7 @@ class Colliders(LedProgramBase):
                 if (self.settings.color == ""):
                     color = Color.generateRandom()
                 else:
-                    color = Color.fromHex(self.settings.color)
+                    color = Color.fromHex(self.settings.color)                
                 stick = Stick(startPos, size, self.settings.ledCount, color)
                 self.sticks.append(stick)
                 break
@@ -67,9 +67,10 @@ class Colliders(LedProgramBase):
     def drawAll(self):
         self.leds.clear()
         for stick in self.sticks:
+            stickRGB = stick.color.toRGB()
             for i in range(stick.startPos, stick.endPos):
-                if (i < self.leds.getLength() and i >= 0):
-                  self.leds[i] = stick.color.toRGB()
+                if (i < self.leds.getLength() and i >= 0):                    
+                    self.leds[i] = stickRGB
 
     def collisionDetection(self, cStick, currentIndex):
         for i, stick in enumerate(self.sticks):

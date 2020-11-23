@@ -23,5 +23,8 @@ class LedsWrapper(LedsBase):
   def changeBrightness(self, value):
     self.leds.brightness = value * 0.01
 
+  def currentBrightness(self):
+    return self.leds.brightness / 0.01
+
   def getLength(self):
     return len(self.leds)

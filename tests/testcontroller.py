@@ -11,7 +11,7 @@ LED_COUNT       = 360       # Number of LED pixels
 
 class TestController(Controller):
     def __init__(self, leds):
-        self.settings = Settings(None)
+        self.settings = Settings()
         self.settings.ledCount = LED_COUNT
         self.settings.openFromFile()
         self.settings.isOn = True

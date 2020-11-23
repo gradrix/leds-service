@@ -13,7 +13,7 @@ class Color:
     @staticmethod
     def fromHex(hexStr):
         rgbTuple = tuple(int(hexStr[i:i+2], 16) for i in (0, 2, 4))
-        return Color(rgbTuple[0], rgbTuple[1], rgbTuple[2])
+        return Color(rgbTuple[1], rgbTuple[0], rgbTuple[2])
 
     @staticmethod
     def generateRandom():

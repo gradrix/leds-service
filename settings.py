@@ -44,7 +44,7 @@ class Settings:
                 self.color = loadedSettings["color"]
         except Exception as e:
             print("Error while loading saved data: "+str(e))
-            self.brightness = 50
+            self.brightness = 2
             self.isOn = True
             self.mode = 0
             self.toggle = 0

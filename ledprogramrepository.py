@@ -60,7 +60,13 @@ class LedProgramRepository:
     self.settings.mode = mode
     if (setProgram):
       self.currentProgram = self.programs[self.settings.mode]
-      self.currentProgram.initialize()
+      self.reinitializeLedProgram()
+
+  # -----------------------------
+  # Reinitializes led program
+  # -----------------------------
+  def reinitializeLedProgram(self):
+    self.currentProgram.initialize()
 
   # -----------------------------
   # Gets current led program layout settings
