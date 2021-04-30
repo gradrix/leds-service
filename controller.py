@@ -3,10 +3,10 @@ import sys
 import board
 from settings import Settings
 from ledprogramrepository import LedProgramRepository
-from common.ledswrapper import LedsWrapper
+from neopixelwrapper import NeopixelWrapper
 
 # LED strip configuration:
-LED_COUNT       = 360       # Number of LED pixels
+LED_COUNT       = 300       # Number of LED pixels
 LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
 
 # -----------------------------
@@ -23,18 +23,17 @@ class Controller():
           self.settings = settings
 
         if (leds == None):
-          leds = LedsWrapper(LED_PIN, LED_COUNT)
+          leds = NeopixelWrapper(LED_PIN, LED_COUNT)
         else:
           leds = leds
         self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
-        #print("Controller: O:"+str(self.settings.isOn)+ "O:"+str(self.settings.brightness)+ "S:"+str(self.settings.speed))
-
     # -----------------------------
     # Making led setting changes
     # -----------------------------
     def change(self, command):
         value = None
+        print("Command: "+str(command)+ " received!")
         #Brightness
         if (command.find("B:") != -1):
             value = command.replace("B:", "")

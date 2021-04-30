@@ -1,7 +1,7 @@
 from common.ledsbase import LedsBase
 import neopixel
 
-class LedsWrapper(LedsBase):
+class NeopixelWrapper(LedsBase):
 
   def __init__(self, pin, ledCount):
     self.leds = neopixel.NeoPixel(pin, ledCount, auto_write = False, pixel_order = neopixel.RGB)

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod, abstractproperty
-from common.ledswrapper import LedsWrapper
 
+# ------------------------------ #
+# Abstract class of led program  #
+# ------------------------------ #
 class LedProgramBase(ABC):
 
   @abstractmethod

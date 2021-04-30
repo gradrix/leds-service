@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.7
+#!/usr/bin/python3.7
 
 import threading
 import builtins
@@ -78,7 +78,7 @@ class LedService:
         while True:
           self.controller.show()
 
-#Don't run LedService if we are testing it
+#Start service
 if (not hasattr(builtins, "IS_TEST_ENV") or builtins.IS_TEST_ENV == False):
   ledSvc = LedService("0.0.0.0", "9000")
   ledSvc.start()

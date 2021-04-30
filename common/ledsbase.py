@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 
+# -------------------------------------- #
+# Abstract class of led control service  #
+# -------------------------------------- #
 class LedsBase(ABC):
 
   @abstractmethod

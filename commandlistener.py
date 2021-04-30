@@ -6,9 +6,9 @@ import time
 import signal
 import os
 
-# -----------------------------
-# TCP Server to receive/send program commands
-# -----------------------------
+# ------------------------------------------- #
+# TCP Server to receive/send program commands #
+# ------------------------------------------- #
 class CommandListenerTCPServer(asyncore.dispatcher):
 
     def __init__(self, host, port, callback):
@@ -59,4 +59,3 @@ class ClientHandler(asyncore.dispatcher):
 
     def readable(self):
       return True
-

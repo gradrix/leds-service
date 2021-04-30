@@ -1,48 +1,34 @@
 import curses
+import datetime
 import time
 import sys
 import threading
+from io import StringIO
 from common.ledsbase import LedsBase
-from sty import bg, rs
-
-LED_OFF_CHAR = '□'
-LED_ON_CHAR = '■'
+from common.color import Color
+from tests.terminalColorPrinter import get_print_rgb
+from tests.ledLog import LedLog
 
 class LedsTestWrapper(LedsBase):
   
   ledCount = 0
+  messages = []
 
   def __init__(self):
     self.started = False
     self.pixels = {}
     self.sc = curses.initscr()
+    self.setStdOut()
 
   def __getitem__(self, key):
-    return self.pixel[key]    
+    return self.pixel[key]
 
   def __setitem__(self, key, value):
-    r = value[0]
-    g = value[1]
-    b = value[2]
-    self.pixels[key] = bg(r,g,b) + LED_ON_CHAR + bg.rs
+    self.pixels[key] = Color(value[1], value[0], value[2])
 
   #Curses specific helper methods
   def start(self):
     self.started = True
-
-  def replacer(self, s, newstring, index, nofail=False):
-    # raise an error if index is outside of the string
-    if not nofail and index not in range(len(s)):
-      raise ValueError("index outside given string")
-
-    # if not erroring, but the index is still not in the correct range..
-    if index < 0:  # add it to the beginning
-      return newstring + s
-    if index > len(s):  # add it to the end
-      return s + newstring
-
-    # insert the new string between "slices" of the original
-    return s[:index] + newstring + s[index + 1:]
 
   def initialize(self, ledCount):
     self.ledCount = ledCount
@@ -50,7 +36,7 @@ class LedsTestWrapper(LedsBase):
 
   def clear(self, show = False):
     for i in range(self.ledCount):
-      self.pixels[i] = bg(0,0,0) + LED_OFF_CHAR + bg.rs
+      self.pixels[i] = Color(0, 0, 0)
  
     if (show):
       self.refresh()
@@ -62,59 +48,101 @@ class LedsTestWrapper(LedsBase):
     self.clear()
     pass
 
+  def changeBrightness(self, value):
+    pass
+
   def getLength(self):
     return self.ledCount  
+
+  def setStdOut(self):
+    self.stdResult = StringIO()
+    self.stdPosition = 0
+    sys.stdout = self.stdResult
+
+  def processStdOut(self, y, maxY):
+    currentStreamPosition = self.stdResult.tell()
+
+    if (self.stdPosition != currentStreamPosition):
+      ledLog = LedLog(datetime.datetime.now().time(), self.stdResult.getvalue(), 0)
+      self.messages.append(ledLog)
+      self.setStdOut()
+
+    #Clear messages which could not fit to the screen
+    maxMessagesOnScreen = len(self.messages) - maxY - y - 2
+    if (maxMessagesOnScreen > 0):
+      self.messages = self.messages[maxMessagesOnScreen:]
+
+    for index, msg in enumerate(reversed(self.messages)):
+      self.sc.addstr(y + index, 0, msg.print(maxY))
+
+  def doesFitScreen(self, maxX, maxY, amount):
+    lines = (amount / (maxX + 1)) + 1
+    spare = amount % (maxX + 1)
+    if (lines > 1):
+      lines = (lines - 1) * 2
+      if (spare > 0):
+        lines = lines + 1
+    return lines < maxY
 
   def show(self):
     if (not self.started):
       return
 
+    """Screen setup"""
     maxY, maxX = self.sc.getmaxyx()
-    x = 0
-    y = 1
-    line = " " * maxX
-    res = []
-    for y in range(maxY):
-      res.append(line)
+    maxX = maxX - 2
+    maxY = maxY - 1
+    if (self.doesFitScreen(maxX, maxY, self.getLength() * 2)):
+      strToPrint = '■ '
+      strLen = 2
+    else:
+      strToPrint = '■'
+      strLen = 1
+    """End of Screen setup"""
 
-    inverse = False
-    newLine = False
-    yChanged = False
+    isReversed = False
+    cornerIndex = 0
+    x = 0 - strLen
+    y = 0
 
-    for i, pixel in enumerate(self.pixels):
-      if (y % 2 == 0 or newLine):
-        y = y + 1
-        yChanged = True
-        newLine = False
-      elif (inverse):
-        x = x - 1
-      else:
-        x = x + 1
+    for index, pixel in self.pixels.items():
+      newIncX = x + strLen
+      newDecX = x - strLen
 
-      #print("TEST:"+res[y-1][x-1])
-      res[y-1] = self.replacer(res[y-1], str(i), x-1)
+      if (not isReversed):
+        if (x < maxX):
+          x = newIncX
+        else:
+          if (cornerIndex < 2):
+            y = y + 1
+            cornerIndex = cornerIndex + 1
+          else:
+            isReversed = not isReversed
+            cornerIndex = 0
+            x = newDecX
+      elif (isReversed):
+        if (x > 0):
+          x = newDecX
+        else:
+          if (cornerIndex < 2):
+            y = y + 1
+            cornerIndex = cornerIndex + 1
+          else:
+            isReversed = not isReversed
+            cornerIndex = 0
+            x = newIncX
 
-      if not yChanged:        
-        if x >= maxX - 1:
-          inverse = True
-          newLine = True
-        elif x <= 1 and inverse:
-          inverse = False
-          newLine = True
-      else:
-        yChanged = False
-    
-    output = ""
-    for line in res:
-      output += line + '\n'
+      self.sc.addstr(y, x, strToPrint, curses.color_pair(get_print_rgb(pixel.r, pixel.g, pixel.b)))
 
-    print(output, end='\r')
+    self.processStdOut(y + 1, maxY)
+      # try:
+      #   self.sc.addstr(y, x, strToPrint, curses.color_pair(get_print_rgb(pixel.r, pixel.g, pixel.b)))
+      # except:
+      #   print("EXEPT x:"+str(self.doesFitScreen(maxX, maxY, len(self.pixels))))
+      #   time.sleep(10)
+      #   pass
 
-    key = self.sc.getch()
-    if key == ord('q'):
-      sys.exit()
- 
-    time.sleep(0.01)
-
-  def changeBrightness(self, value):
-    pass
+    self.sc.refresh()
+    #self.sc.erase() 
+    self.sc.clear()
+    time.sleep(0.1)
