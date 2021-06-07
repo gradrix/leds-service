@@ -11,4 +11,4 @@ class LedLog:
     def print(self, maxLen):
         msg = self.time + "> "
         realMsgLen = maxLen - len(msg) + len(self.message)
-        return msg + self.message[self.position:realMsgLen] + " Rlen:" + str(realMsgLen)
+        return msg + self.message[self.position:realMsgLen]

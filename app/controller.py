@@ -6,7 +6,7 @@ from ledprogramrepository import LedProgramRepository
 from neopixelwrapper import NeopixelWrapper
 
 # LED strip configuration:
-LED_COUNT       = 300       # Number of LED pixels
+LED_COUNT       = 360       # Number of LED pixels
 LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
 
 # -----------------------------
@@ -33,7 +33,6 @@ class Controller():
     # -----------------------------
     def change(self, command):
         value = None
-        print("Command: "+str(command)+ " received!")
         #Brightness
         if (command.find("B:") != -1):
             value = command.replace("B:", "")
