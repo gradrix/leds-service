@@ -12,8 +12,11 @@ class Color:
 
     @staticmethod
     def fromHex(hexStr):
-        rgbTuple = tuple(int(hexStr[i:i+2], 16) for i in (0, 2, 4))
-        return Color(rgbTuple[1], rgbTuple[0], rgbTuple[2])
+        try:
+            rgbTuple = tuple(int(hexStr[i:i+2], 16) for i in (0, 2, 4))
+            return Color(rgbTuple[1], rgbTuple[0], rgbTuple[2])
+        except Exception as e:
+            return Color(255, 255, 255)
 
     @staticmethod
     def generateRandom():

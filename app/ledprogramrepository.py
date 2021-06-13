@@ -19,8 +19,12 @@ class LedProgramRepository:
     
     programTypes = self.importFromFolder(LED_PROGRAMS_DIR, LedProgramBase)
     print("Initializing Led Programs: ", end = "")
-    for programType in programTypes:
-      print(str(programType.__name__), end = ", ")
+    for i, programType in enumerate(programTypes):
+      programName = programType.__name__
+      if (i == len(programTypes) - 1):
+        print(programName, end = "")
+      else:
+        print(programName, end = ", ")
       self.add(programType(settings, leds))
     print(" <- Success!")  
 

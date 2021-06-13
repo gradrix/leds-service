@@ -2,3 +2,4 @@ rpi_ws281x
 adafruit-circuitpython-neopixel
 RPi.GPIO
 sty
+zmq

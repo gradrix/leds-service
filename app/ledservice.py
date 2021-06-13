@@ -1,9 +1,10 @@
 #!python3
 
+import time
 import threading
 import builtins
 from controller import Controller
-from commandlistener import CommandListenerTCPServer
+from commandlistener import CommandListenerServer
 
 # -----------------------------
 # Main program entry point
@@ -22,15 +23,18 @@ class LedService:
     # Processes received commands via TCP
     # -----------------------------
     def processCommand(self, command):
-        if (command == "ST"):
-            return self.encodeSettings(self.controller.settings)
-        elif (command == "LA"):
-            return self.encodeModeLayout(self.controller.getModeLayout())
-        elif (command == "RS"):
-            self.controller.settings.reset()
-            return "DONE"
-        else: 
-            return self.encodeSettings(self.controller.change(command))
+        try:
+            if (command == "ST"):
+                return self.encodeSettings(self.controller.settings)
+            elif (command == "LA"):
+                return self.encodeModeLayout(self.controller.getModeLayout())
+            elif (command == "RS"):
+                self.controller.settings.reset()
+                return "DONE"
+            else: 
+                return self.encodeSettings(self.controller.change(command))
+        except Exception as e:
+            print("processCommand error: "+str(e))
 
     # -----------------------------
     # Encodes leds setting object into string
@@ -60,14 +64,14 @@ class LedService:
         return layoutStr
 
     # -----------------------------
-    #  TCP listener object thread
+    #  ZMQ listener object thread
     # -----------------------------
     def listener(self):
-        self.cmdListener = CommandListenerTCPServer(self.ip, self.port, self.processCommand)
+        self.cmdListener = CommandListenerServer(self.ip, self.port, self.processCommand)
         self.cmdListener.startListening()
 
     # -----------------------------
-    #  Starts TCP command listener and begins led program
+    #  Starts ZMQ command listener and begins led program
     # -----------------------------
     def start(self):
         #Starting TCP listener
@@ -76,6 +80,7 @@ class LedService:
         thread.start()
 
         while True:
+          time.sleep(1)
           self.controller.show()
 
 #Start service
