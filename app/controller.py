@@ -1,3 +1,4 @@
+import os
 import time
 import sys
 import board
@@ -5,29 +6,44 @@ from settings import Settings
 from ledprogramrepository import LedProgramRepository
 from neopixelwrapper import NeopixelWrapper
 
-# LED strip configuration:
-LED_COUNT       = 360       # Number of LED pixels
-LED_PIN         = board.D18 # GPIO pin connectedto the pixels (18 uses PWM!).
-
 # -----------------------------
 # Controller which changes led behavour values based on received commands
 # -----------------------------
 class Controller():
     def __init__(self, leds = None, settings = None):
-          
+         
+        pidInt = int(os.environ.get("LED_PID", default=18))
+        pid = self.getPid(pidInt)
+        ledCount = int(os.environ.get("LED_COUNT", default=100))
+
         if (settings == None):
           self.settings = Settings()
-          self.settings.ledCount = LED_COUNT
+          self.settings.ledCount = ledCount
           self.settings.openFromFile()
         else:
           self.settings = settings
 
         if (leds == None):
-          leds = NeopixelWrapper(LED_PIN, LED_COUNT)
+          leds = NeopixelWrapper(pid, ledCount)
         else:
           leds = leds
         self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
+
+    # ----------------------------
+    # Get board PID by int
+    # ----------------------------
+    def getPid(self, pidInt):
+        pid = None
+        if (pidInt == 18):
+            pid = board.D18
+        elif (pidInt == 21):
+            pid = board.D21
+        else:
+            raise ValueError("Incorrect PID value, only 18 and 21 are supported")
+
+        return pid
+
     # -----------------------------
     # Making led setting changes
     # -----------------------------

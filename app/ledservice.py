@@ -1,5 +1,6 @@
 #!python3
 
+import os
 import time
 import threading
 import builtins
@@ -15,9 +16,9 @@ class LedService:
         self.ip = ip
         self.port = port
         if (controller == None):
-          self.controller = Controller()
+            self.controller = Controller()
         else:
-          self.controller = controller
+            self.controller = controller
 
     # -----------------------------
     # Processes received commands via TCP
@@ -74,16 +75,16 @@ class LedService:
     #  Starts ZMQ command listener and begins led program
     # -----------------------------
     def start(self):
-        #Starting TCP listener
         thread = threading.Thread(target=self.listener, args=())
         thread.daemon = True
         thread.start()
 
         while True:
-          time.sleep(1)
-          self.controller.show()
+            self.controller.show()
 
 #Start service
 if (not hasattr(builtins, "IS_TEST_ENV") or builtins.IS_TEST_ENV == False):
-  ledSvc = LedService("0.0.0.0", "9000")
-  ledSvc.start()
+    port = int(os.environ.get("LED_PORT", default=9000))
+
+    ledSvc = LedService("0.0.0.0", port)
+    ledSvc.start()
