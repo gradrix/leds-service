@@ -14,11 +14,13 @@ requireRoot()
     fi
 }
 
-installPackage()
+installDocker()
 {
-    if [ $(dpkg-query -W -f='${Status}' ${1} 2>/dev/null | grep -c "ok installed") -eq 0 ];
+    if [ ! -x "$(command -v docker)" ]
     then
-        sudo apt-get install ${1};
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
+        rm get-docker.sh
     fi
 }
 
@@ -99,7 +101,7 @@ getInstallConfig()
 
 createDockerNetwork()
 {
-    if [ docker network inspect ${name}-network >/dev/null 2>&1 ]
+    if [[ "$(docker network ls | grep ${name}-network)" == "" ]]
     then
         docker network create --driver bridge ${name}-network
     fi
@@ -185,7 +187,7 @@ install()
     parseCommands $configurationString
 
     requireRoot
-    installPackage "docker"
+    installDocker
     
     createDockerNetwork
     installDockerContainers
