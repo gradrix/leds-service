@@ -1,0 +1,138 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+.LedsApp {
+    text-align: center;
+
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+        height: 80px;
+    }
+    
+    .App-header {
+        background-color: #383838;
+        padding: 10px;
+        color: white;
+    }
+    
+    .App-intro {
+        font-size: large;
+    }
+    
+    @keyframes App-logo-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .led-status {
+        overflow: hidden; 
+        margin: auto;
+        display: inline-block;
+    
+        .icon {
+            background-repeat: no-repeat;
+            background-size: contain;
+            float: left;
+    
+            &.active {
+                height: 70px;
+                width: 70px;
+                background-image: url("img/tick.png");
+            }
+    
+            &.inactive{
+                height: 85px;
+                width: 85px;
+                background-image: url("img/cross.png");
+            }
+        }
+        
+        .text {
+            float: left;
+            margin-left: 8px;
+    
+            .status {
+                padding-top: 8px; 
+                font-weight: 700;
+    
+                .active {
+                    color: #01b300
+                }
+                .inactive {
+                    color: #ea0000
+                }
+            }
+            .clock {
+                font-weight: 500;
+                color: #ffb9bf;
+            }
+        }
+        .button { 
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 54px;
+            width: 155px;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            margin-top: 15px;
+            margin-right: 15px;
+    
+            &.on {
+                background-image: url("img/on.png");
+            }
+            &.off {
+                background-image: url("img/off.png");
+            }
+            &.disabled {
+                background-image: url("img/disabled.png");
+            }
+        }
+    } 
+    
+    .slider-container {
+        padding-top: 50px;
+
+        label {
+            font-size: 20px;
+            display: block;
+            padding-bottom: 5px;
+        }
+    }
+
+    .color-picker-controls {
+        padding-bottom: 10px;
+
+        button {
+            min-width: 85px;
+            margin-right: 2px;
+        }
+    }
+}
+
+@media (max-width: 460px) {
+    .LedsApp {
+        .led-status {
+            display: block;
+
+            .button {
+                float: right;
+                position: absolute;
+            }
+
+            .text {
+                margin-top: 13px;
+            }
+        }
+
+        .slider-container {
+            padding-top: 20px;
+
+            label {
+                font-size: 16px;
+            }
+        }
+    }
+}

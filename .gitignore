@@ -2,6 +2,7 @@
 *.swo
 saved-data
 .install.cfg
+node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -14,6 +15,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+react-build/
 develop-eggs/
 dist/
 downloads/
@@ -92,6 +94,7 @@ celerybeat-schedule
 env/
 venv/
 ENV/
+leds_web_env/
 env.bak/
 venv.bak/
 

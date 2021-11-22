@@ -1,8 +1,10 @@
 saved-data
-
 **/Dockerfile
 .dockerignore
 .gitignore
+node_modules
+build
+react-build
 README.md
 **/*.pyc
 **/__pycache__
