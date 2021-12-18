@@ -6,10 +6,12 @@ services:
     build:
         context: .
         dockerfile: ./docker/nginx/Dockerfile
+    image:
+        gradrix/leds_web_nginx
     ports:
         - 80:80
     volumes:
-        - static_volume:/app/backend/build
+        - ./web/frontend-source:/usr/share/nginx/html:rw
         - ./docker/nginx:/etc/nginx/conf.d
     depends_on: 
         - django
@@ -18,16 +20,16 @@ services:
     build:
         context: .
         dockerfile: ./docker/django/Dockerfile
-    entrypoint: /app/backend/wsgi-entrypoint.sh
+    image:
+        gradrix/leds_web_django
+    entrypoint: /app/wsgi-entrypoint.sh
     volumes:
-        - static_volume:/app/backend/build
+        - ./web/config:/app/config
+        - ./web/frontend-source:/app/frontend-source:rw
     expose:
         - 8080
     env_file:
       - ./.env.prod
-
-volumes:
-  static_volume: {}
 
 networks:
   default:

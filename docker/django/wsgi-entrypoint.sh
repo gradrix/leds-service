@@ -1,11 +1,11 @@
 #!/bin/sh
 
-until cd /app/backend
+until cd /app
 do
     echo "Waiting for server volume..."
 done
 
-cd /app/backend
+cd /app
 
 until python manage.py migrate
 do

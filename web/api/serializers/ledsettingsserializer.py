@@ -8,3 +8,4 @@ class LedSettingsSerializer(serializers.Serializer):
     toggle = serializers.IntegerField()
     speed = serializers.IntegerField()
     color = serializers.CharField(default="", max_length=6)
+    service = serializers.IntegerField(default=1)

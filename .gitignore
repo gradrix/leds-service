@@ -1,8 +1,9 @@
 *.swp
 *.swo
 saved-data
-.install.cfg
+install.cfg
 node_modules/
+frontend-source/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

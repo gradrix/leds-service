@@ -5,19 +5,19 @@ from api.models.ledsettings import LedSettings
 from api.models.modelayout import ModeLayout
 from api.models.ledprogram import LedProgram
 from api.commandclient import CommandClient
-
-LED_HOST = os.environ.get("LED_SERVER_HOST")
-LED_PORT = os.environ.get("LED_SERVER_PORT")
+from api.gpioclients import GpioClients
 
 class LedServiceWrapper():
 
-    def __init__(self, ip = LED_HOST, port = LED_PORT):
-        self.cmdClient = CommandClient(ip, port)
+    def __init__(self):
+        GpioClients.initialize()
 
-    def getSettings(self, settingsString = None):
+    def getSettings(self, settingsString = None, svcIndex = 1):
         res = LedSettings()
+        res.host = 0
+
         if (settingsString == None):
-            settingsData = self.cmdClient.send("ST")
+            settingsData = GpioClients.get(svcIndex).send("ST")
         else:
             settingsData = settingsString
         
@@ -40,11 +40,14 @@ class LedServiceWrapper():
                 res.speed = int(value)
             elif (key == "C"):
                 res.color = str(value)
+            elif (key == "H"):
+                res.host = int(value)
+
         return res
     
-    def getModeLayout(self):
+    def getModeLayout(self, svcIndex = 1):
         res = ModeLayout()
-        layoutData = self.cmdClient.send("LA")
+        layoutData = GpioClients.get(svcIndex).send("LA")
         resultArray = re.findall("(?:[a-zA-Z]*:)(?:(?!;).)*", layoutData, re.DOTALL)
 
         for param in resultArray:
@@ -68,6 +71,6 @@ class LedServiceWrapper():
                     res.modes.append(LedProgram(int(modeValues[0]), str(modeValues[1])))
         return res
 
-    def setSetting(self, setting):
-        allSettings = self.cmdClient.send(setting)
-        return self.getSettings(allSettings)
+    def setSetting(self, setting, svcIndex = 1):
+        allSettings = GpioClients.get(svcIndex).send(setting)
+        return self.getSettings(allSettings, svcIndex)

@@ -1,14 +1,18 @@
-FROM python:3
+FROM python:3-slim-buster
 
-# set a directory for the app
-WORKDIR /usr/src/app
+# OS deps
+RUN apt update -y && apt-get install -y g++
 
-# install dependencies
-COPY requirements.txt .
+# set working dir
+WORKDIR /app
+
+# upgrade pip & install dependencies
+#RUN pip install --no-cache-dir --upgrade pip
+COPY ./gpio-service/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy all the files to the container
-COPY ./app .
+COPY ./gpio-service/* ./
 
 # setting up arguments
 ARG port=9000

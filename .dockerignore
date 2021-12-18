@@ -3,6 +3,7 @@ saved-data
 .dockerignore
 .gitignore
 node_modules
+frontend-source
 build
 react-build
 README.md

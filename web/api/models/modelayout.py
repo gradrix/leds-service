@@ -7,3 +7,4 @@ class ModeLayout(models.Model):
   modes = []
   minSpeed = models.IntegerField()
   maxSpeed = models.IntegerField()
+  service = models.IntegerField()

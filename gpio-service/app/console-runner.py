@@ -25,7 +25,7 @@ def cursesWrapper(window):
 
 try:
   curses.wrapper(cursesWrapper)
-  ledSvc = LedService("localhost", "9090", controller)
+  ledSvc = LedService("localhost", "9001", controller)
   thread = threading.Thread(target=ledSvc.start, args=())
   leds.start()
   thread.start()

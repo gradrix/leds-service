@@ -81,10 +81,3 @@ class LedService:
 
         while True:
             self.controller.show()
-
-#Start service
-if (not hasattr(builtins, "IS_TEST_ENV") or builtins.IS_TEST_ENV == False):
-    port = int(os.environ.get("LED_PORT", default=9000))
-
-    ledSvc = LedService("0.0.0.0", port)
-    ledSvc.start()
