@@ -3,7 +3,7 @@
 saved-data
 install.cfg
 node_modules/
-frontend-source/
+frontend-build/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

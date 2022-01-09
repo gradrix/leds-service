@@ -11,8 +11,7 @@ services:
     ports:
         - 80:80
     volumes:
-        - ./web/frontend-source:/usr/share/nginx/html:rw
-        - ./docker/nginx:/etc/nginx/conf.d
+        - ./frontend-build:/usr/share/nginx/html:rw
     depends_on: 
         - django
   django:
@@ -25,7 +24,7 @@ services:
     entrypoint: /app/wsgi-entrypoint.sh
     volumes:
         - ./web/config:/app/config
-        - ./web/frontend-source:/app/frontend-source:rw
+        - ./frontend-build:/frontend-build:rw
     expose:
         - 8080
     env_file:

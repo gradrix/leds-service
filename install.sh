@@ -220,7 +220,7 @@ startAndEnableService()
 
 install()
 {
-    mkdir -p frontend-source
+    mkdir -p frontend-build
 
     getInstallConfig $1
     parseCommands $configurationString
