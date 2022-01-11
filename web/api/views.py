@@ -51,7 +51,7 @@ class LedStatusView(BaseView):
         try:
             result = self.ledSvc.getSettings(None, index) 
         except Exception as e:
-            print("Setting retrieval error!")
+            print("Setting retrieval error! "+str(e))
             result = LedSettings()
 
         result.service = index

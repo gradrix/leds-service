@@ -7,6 +7,7 @@ class CommandClient():
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
+        print('Initializing new gpio client with '+str(ip)+':'+str(port))
 
     def sendWorker(self, request, queue):
         context = zmq.Context()
@@ -21,12 +22,13 @@ class CommandClient():
         try:
             socket.send(request.encode('ascii'))
             result['response'] = socket.recv().decode('ascii')
+            queue.put(result)
         except Exception as e:
             print('Error while sending message to '+str(target)+' -> '+str(e))
             pass
         finally:
+            queue.put(result)
             context.term()
-        queue.put(result)
 
     def send(self, request, timeout=5):
         begin = time.time()
@@ -43,5 +45,6 @@ class CommandClient():
             try:            
                 result = queue.get(False)
                 return result['response']
-            except:
+            except Exception as e:
+                print('ZMQ error: '+str(e))
                 return ""

@@ -113,6 +113,7 @@ createDockerNetwork()
 
 installDockerContainers()
 {
+    sudo systemctl reset-failed
     for (( instance=1; instance <= $instances; ++instance ))
     do
         containerName="${name}-${instance}"
@@ -221,11 +222,12 @@ startAndEnableService()
 install()
 {
     mkdir -p frontend-build
+    sudo chmod -R a+rwx frontend-build
 
     getInstallConfig $1
     parseCommands $configurationString
 
-    requireRoot
+    #requireRoot
     installDocker
     
     createDockerNetwork

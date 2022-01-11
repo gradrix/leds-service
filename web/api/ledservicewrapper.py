@@ -20,7 +20,7 @@ class LedServiceWrapper():
             settingsData = GpioClients.get(svcIndex).send("ST")
         else:
             settingsData = settingsString
-        
+
         resultArray = re.findall("(?:[a-zA-Z]*:)(?:(?!;).)*", settingsData, re.DOTALL)
 
         for param in resultArray:

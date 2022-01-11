@@ -1,4 +1,7 @@
+import os
 from pathlib import Path
+
+LEDS_INSTALL_CFG = os.environ.get("LEDS_INSTALL_CFG")
 
 class GpioService():
     
@@ -13,7 +16,7 @@ class ConfigReader():
     configs = []
 
     @staticmethod
-    def parseString(config):
+    def initConfigs(config):
         result = []
         services = config.split(":")
         for service in services:
@@ -42,15 +45,25 @@ class ConfigReader():
         ConfigReader.configs = result
 
     @staticmethod
+    def readCfgFile():
+        path = Path(__file__).parent / "../config/install.cfg"
+        data = ""
+        if (path.is_file()):
+            with path.open() as f:
+                data = f.read().rstrip()
+        return data
+ 
+    @staticmethod
     def read():
         if (len(ConfigReader.configs) == 0):
-            print("Reading install.config")
-            path = Path(__file__).parent / "../config/install.cfg"
+            print("Reading install.config", end=" ")
             data = ""
-            if (path.is_file()):
-                with path.open() as f:
-                    data = f.read().rstrip()
-            ConfigReader.parseString(data)
+            if not LEDS_INSTALL_CFG:
+                data = ConfigReader.readCfgFile()
+            else:
+                data = LEDS_INSTALL_CFG
+            print(" => "+data)
+            ConfigReader.initConfigs(data)
         else:
             print("Returning existing loaded install.config")
 
