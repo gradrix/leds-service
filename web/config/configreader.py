@@ -5,8 +5,8 @@ LEDS_INSTALL_CFG = os.environ.get("LEDS_INSTALL_CFG")
 
 class GpioService():
     
-    def __init__(self, pid, port, ledCount):
-        self.pid = pid
+    def __init__(self, pin, port, ledCount):
+        self.pin = pin
         self.port = port
         self.ledCount = ledCount
 
@@ -21,7 +21,7 @@ class ConfigReader():
         services = config.split(":")
         for service in services:
             args = service.split(",")
-            pid = None
+            pin = None
             port = None
             ledCount = None
             for arg in args:
@@ -30,15 +30,15 @@ class ConfigReader():
                     key = keyValuePair[0]
                     value = keyValuePair[1]
                     
-                    if (key == "pid"):
-                        pid = value
+                    if (key == "pin"):
+                        pin = value
                     elif (key == "port"):
                         port = value
                     elif (key == "ledCount"):
                         ledCount = value
 
-            if (pid != None and port != None and ledCount != None):
-                result.append(GpioService(pid, port, ledCount))
+            if (pin != None and port != None and ledCount != None):
+                result.append(GpioService(pin, port, ledCount))
 
         if (len(result) == 0):
             result.append(GpioService("18", "9000", "10"))

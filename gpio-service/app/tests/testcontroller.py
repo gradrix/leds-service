@@ -1,7 +1,3 @@
-import time
-import sys
-import neopixel
-import board
 from settings import Settings
 from controller import Controller
 from tests.ledstestwrapper import LedsTestWrapper

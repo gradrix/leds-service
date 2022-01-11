@@ -10,7 +10,7 @@ class CommandClient():
         print('Initializing new gpio client with '+str(ip)+':'+str(port))
 
     def sendWorker(self, request, queue):
-        context = zmq.Context()
+        context = zmq.Context.instance()
         socket = context.socket(zmq.REQ)
         socket.setsockopt(zmq.SNDTIMEO, 1000)
         socket.setsockopt(zmq.RCVTIMEO, 1000)
@@ -22,13 +22,12 @@ class CommandClient():
         try:
             socket.send(request.encode('ascii'))
             result['response'] = socket.recv().decode('ascii')
-            queue.put(result)
         except Exception as e:
             print('Error while sending message to '+str(target)+' -> '+str(e))
             pass
         finally:
             queue.put(result)
-            context.term()
+            context.destroy()
 
     def send(self, request, timeout=5):
         begin = time.time()

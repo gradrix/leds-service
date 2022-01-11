@@ -1,9 +1,18 @@
-from common.ledsbase import LedsBase
+import board
 import neopixel
+from common.ledsbase import LedsBase
 
 class NeopixelWrapper(LedsBase):
 
-  def __init__(self, pin, ledCount):
+  def __init__(self, pinInt, ledCount):
+    pin = None
+    if (pinInt == 18):
+        pin = board.D18
+    elif (pinInt == 21):
+        pin = board.D21
+    else:
+        raise ValueError("Incorrect pin value, only 18 and 21 are supported")
+
     self.leds = neopixel.NeoPixel(pin, ledCount, auto_write = False, pixel_order = neopixel.RGB)
 
   def __getitem__(self, key):

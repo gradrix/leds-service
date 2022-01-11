@@ -11,7 +11,7 @@ helpPrint()
 {
     echo ""
     echo "Usage: $0 [-i][-r][-u][-h]"
-    echo -e "\t-i pid=18,port=9000,ledCount=100:pid=21,port=9001,ledCount=30"
+    echo -e "\t-i pin=18,port=9000,ledCount=100:pin=21,port=9001,ledCount=30"
     echo -e "\t   Installs service with the provided configuration or reinstalls if .install.cfg already exists"
     echo -e "\t-r \n\t   Reinstalls current installation."
     echo -e "\t-u \n\t   Uninstall current installation."
@@ -60,7 +60,7 @@ parseCommands()
             key=${configPair[0]//$'\n'/}
             value=${configPair[1]//$'\n'/}
 
-            if [ $key == "pid" ] || [ $key == "port" ] || [ $key == "ledCount" ]; 
+            if [ $key == "pin" ] || [ $key == "port" ] || [ $key == "ledCount" ]; 
             then
                 if ! [[ $value =~ ^[0-9]+([.][0-9]+)?$ ]];
                 then
@@ -70,7 +70,7 @@ parseCommands()
                     settings["${instances}-${key}"]+=$value
                 fi
             else
-                echo "Only \"pid\", \"port\" and \"ledCount\" keys are supported"
+                echo "Only \"pin\", \"port\" and \"ledCount\" keys are supported"
                 exit 1
             fi
         done
@@ -117,7 +117,7 @@ installDockerContainers()
     for (( instance=1; instance <= $instances; ++instance ))
     do
         containerName="${name}-${instance}"
-        pid=${settings["${instance}-pid"]}
+        pin=${settings["${instance}-pin"]}
         port=${settings["${instance}-port"]}
         ledCount=${settings["${instance}-ledCount"]}
 
@@ -135,7 +135,7 @@ installDockerContainers()
         fi
 
         echo "Building image: gradrix/${name}-${instance}..."
-        sudo docker build -t gradrix/${name}-${instance} --build-arg pid=${pid} --build-arg port=${port} --build-arg ledCount=${ledCount} -f ./docker/gpio-service/Dockerfile .
+        sudo docker build -t gradrix/${name}-${instance} --build-arg pin=${pin} --build-arg port=${port} --build-arg ledCount=${ledCount} -f ./docker/gpio-service/Dockerfile .
 
         echo "Creating and running cointainer once..."
         docker run --name ${name}-${instance} -it --device /dev/gpiomem -p ${port}:${port} --privileged -d --restart unless-stopped --network ${name}-network gradrix/${name}-${instance}

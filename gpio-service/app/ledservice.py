@@ -1,10 +1,7 @@
-#!python3
-
 import os
 import time
 import threading
 import builtins
-from controller import Controller
 from commandlistener import CommandListenerServer
 
 # -----------------------------
@@ -12,13 +9,10 @@ from commandlistener import CommandListenerServer
 # -----------------------------
 class LedService:
 
-    def __init__(self, ip, port, controller = None):
+    def __init__(self, ip, port, controller):
         self.ip = ip
         self.port = port
-        if (controller == None):
-            self.controller = Controller()
-        else:
-            self.controller = controller
+        self.controller = controller
 
     # -----------------------------
     # Processes received commands via TCP
@@ -81,10 +75,3 @@ class LedService:
 
         while True:
             self.controller.show()
-
-#Start service
-if (not hasattr(builtins, "IS_TEST_ENV") or builtins.IS_TEST_ENV == False):
-    port = int(os.environ.get("LED_PORT", default=9000))
-
-    ledSvc = LedService("0.0.0.0", port)
-    ledSvc.start()
