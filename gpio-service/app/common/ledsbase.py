@@ -26,5 +26,5 @@ class LedsBase(ABC):
     pass
 
   @abstractmethod
-  def getLength(self):
+  def count(self):
     pass

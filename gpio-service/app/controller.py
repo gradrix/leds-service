@@ -9,10 +9,10 @@ class Controller():
     def __init__(self, leds, settings = None):
         if (settings == None):
           self.settings = Settings()
-          self.settings.ledCount = ledCount
           self.settings.openFromFile()
         else:
           self.settings = settings
+        self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
 
     # -----------------------------

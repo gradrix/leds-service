@@ -1,7 +1,8 @@
 #!python3
 import os
+from neopixelwrapper import NeopixelWrapper
 from controller import Controller
-from commandlistener import CommandListenerServer
+from ledservice import LedService
 
 #Start service
 port = int(os.environ.get("LED_PORT", default=9000))

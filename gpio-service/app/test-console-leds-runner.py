@@ -7,7 +7,7 @@ import sys
 from ledservice import LedService
 from controller import Controller
 from settings import Settings
-from tests.ledstestwrapper import LedsTestWrapper
+from tests.ledstestwrappercli import LedsTestWrapper
 
 LED_COUNT = 360
 

@@ -39,7 +39,7 @@ class Rainbow(LedProgramBase):
     def rainbow(self, wait_ms=3, iterations=1):
         """Draw rainbow that fades across all pixels at once."""
         for j in range(256*iterations):
-            for i in range(self.settings.ledCount):
+            for i in range(self.leds.count()):
                 self.leds[i] = self.wheel((i+j) & 255).toRGB()
             self.leds.refresh()
             time.sleep(1 / (self.settings.speed))

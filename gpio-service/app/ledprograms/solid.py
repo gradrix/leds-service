@@ -24,7 +24,7 @@ class Solid(LedProgramBase):
         if (self.settings.color != ""):
             self.color = Color.fromHex(self.settings.color)
 
-        for i in range(self.settings.ledCount):
+        for i in range(self.leds.count()):
             self.leds[i] = self.color.toRGB()
     
         self.leds.refresh()

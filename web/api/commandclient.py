@@ -26,8 +26,9 @@ class CommandClient():
             print('Error while sending message to '+str(target)+' -> '+str(e))
             pass
         finally:
+            socket.close()
             queue.put(result)
-            context.destroy()
+            context.term()
 
     def send(self, request, timeout=5):
         begin = time.time()

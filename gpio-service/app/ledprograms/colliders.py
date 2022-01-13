@@ -4,8 +4,8 @@ import datetime
 from common.color import Color
 from common.ledprogrambase import LedProgramBase
 
-MIN_SIZE = 5
-MAX_SIZE = 15
+MIN_SIZE = 2
+MAX_SIZE = 6
 OBJ_AMOUNT = 15
 
 class Colliders(LedProgramBase):
@@ -69,7 +69,7 @@ class Colliders(LedProgramBase):
         for stick in self.sticks:
             stickRGB = stick.color.toRGB()
             for i in range(stick.startPos, stick.endPos):
-                if (i < self.leds.getLength() and i >= 0):                    
+                if (i < self.leds.count() and i >= 0):                    
                     self.leds[i] = stickRGB
 
     def collisionDetection(self, cStick, currentIndex):
