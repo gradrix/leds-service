@@ -49,14 +49,14 @@ class Colliders(LedProgramBase):
 
         while (not spaceIsFree and retries > 0):
             size = random.randint(MIN_SIZE, MAX_SIZE)
-            startPos = random.randint(0, self.settings.ledCount)
+            startPos = random.randint(0, self.leds.count())
             spaceIsFree = self.isSpaceAvailable(startPos, startPos + size)
             if (spaceIsFree):
                 if (self.settings.color == ""):
                     color = Color.generateRandom()
                 else:
                     color = Color.fromHex(self.settings.color)                
-                stick = Stick(startPos, size, self.settings.ledCount, color)
+                stick = Stick(startPos, size, self.leds.count(), color)
                 self.sticks.append(stick)
                 break
             retries -= 1
