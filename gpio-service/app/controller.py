@@ -75,4 +75,5 @@ class Controller():
         if (self.settings.isOn):
           self.repo.show()
         else:
+          self.leds.clear(False)
           time.sleep(1)
