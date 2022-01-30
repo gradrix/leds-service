@@ -26,7 +26,7 @@ COPY ./gpio-service/requirements.txt ./
 RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 # copy all the files to the container
-COPY ./gpio-service/* ./
+COPY ./gpio-service/ ./
 
 # define the port number the container should expose
 EXPOSE $port

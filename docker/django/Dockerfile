@@ -17,4 +17,4 @@ RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 # copy all project files to the container
 COPY ./docker/django/wsgi-entrypoint.sh ./
-COPY ./web/* ./
+COPY ./web/ ./
