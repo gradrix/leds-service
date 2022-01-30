@@ -12,8 +12,14 @@ class Controller():
           self.settings.openFromFile()
         else:
           self.settings = settings
+        print("Initializing leds with:")
+        print("Brightness: "+str(self.settings.brightness)+" isOn: "+str(self.settings.isOn))
         self.leds = leds
         self.repo = LedProgramRepository(self.settings, leds)
+        #Init
+        self.leds.changeBrightness(self.settings.brightness)
+        if (self.settings.isOn == False):
+            self.leds.clear(True)
 
     # -----------------------------
     # Making led setting changes
