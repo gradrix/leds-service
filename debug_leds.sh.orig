@@ -1,0 +1,14 @@
+#!/bin/bash
+<<<<<<< HEAD
+export LED_COUNT=360
+export LED_PORT=9000
+export LED_PIN=18
+
+sudo python3 ./gpio-service/app/main.py
+=======
+export LED_COUNT=50
+export LED_PORT=9000
+export LED_PIN=18
+
+sudo -E python3 ./gpio-service/main.py
+>>>>>>> 30a03026ba72f6bade0c3cb94df910020bcf3abc
