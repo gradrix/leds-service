@@ -18,7 +18,6 @@ ENV LED_PORT=$port
 ENV LED_PIN=$pin
 ENV LED_COUNT=$ledCount
 
-
 # set working dir
 WORKDIR /app
 
