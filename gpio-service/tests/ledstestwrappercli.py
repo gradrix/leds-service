@@ -51,7 +51,7 @@ class LedsTestWrapper(LedsBase):
   def changeBrightness(self, value):
     pass
 
-  def getLength(self):
+  def count(self):
     return self.ledCount  
 
   def setStdOut(self):
@@ -92,7 +92,7 @@ class LedsTestWrapper(LedsBase):
     maxY, maxX = self.sc.getmaxyx()
     maxX = maxX - 2
     maxY = maxY - 1
-    if (self.doesFitScreen(maxX, maxY, self.getLength() * 2)):
+    if (self.doesFitScreen(maxX, maxY, self.count() * 2)):
       strToPrint = '■ '
       strLen = 2
     else:
