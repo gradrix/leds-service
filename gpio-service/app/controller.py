@@ -75,4 +75,4 @@ class Controller():
         if (self.settings.isOn):
           self.repo.show()
         else:
-          time.sleep(5)
+          time.sleep(1)
