@@ -6,12 +6,16 @@ class NeopixelWrapper(LedsBase):
 
   def __init__(self, pinInt, ledCount):
     pin = None
-    if (pinInt == 18):
+    if (pinInt == 10):
+        pin = board.D10
+    elif (pinInt == 12):
+        pin = board.D12
+    elif (pinInt == 18):
         pin = board.D18
     elif (pinInt == 21):
         pin = board.D21
     else:
-        raise ValueError("Incorrect pin value, only 18 and 21 are supported")
+        raise ValueError("Incorrect pin value, only 10, 12, 18 or 21 are supported")
     self.ledCount = ledCount
     print('Initializing neopixel strip on pin '+str(pinInt)+ ' with '+str(ledCount)+' leds')
     self.leds = neopixel.NeoPixel(pin, ledCount, auto_write = False, pixel_order = neopixel.RGB)
