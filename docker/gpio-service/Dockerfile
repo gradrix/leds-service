@@ -8,16 +8,6 @@ ENV PYTHONUNBUFFERED 1
 RUN apt update -y && apt-get install -y g++ gcc
 RUN pip install --default-timeout=1000 --upgrade pip
 
-# setting up arguments
-ARG port=9000
-ARG pin=18
-ARG ledCount=100
-
-# setting up env variables
-ENV LED_PORT=$port
-ENV LED_PIN=$pin
-ENV LED_COUNT=$ledCount
-
 # set working dir
 WORKDIR /app
 
@@ -27,6 +17,16 @@ RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 # copy all the files to the container
 COPY ./gpio-service/ ./
+
+# setting up arguments
+ARG port=9000
+ARG pin=18
+ARG ledCount=100
+
+# setting up env variables
+ENV LED_PORT=$port
+ENV LED_PIN=$pin
+ENV LED_COUNT=$ledCount
 
 # define the port number the container should expose
 EXPOSE $port
