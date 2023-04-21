@@ -4,7 +4,7 @@ export DEBUG=1
 export SECRET_KEY="1234567890"
 export DJANGO_ALLOWED_HOSTS="*"
 export GPIO_SERVICE_HOST=""
-export LEDS_INSTALL_CFG="pin=18,port=9001,ledCount=360:pin=20,port=9002,ledCount=360"
+export LEDS_INSTALL_CFG="pin=12,port=9005,ledCount=360:pin=21,port=9006,ledCount=360"
 
 cd ./web
 
