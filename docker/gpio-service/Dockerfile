@@ -21,12 +21,11 @@ ENV LED_COUNT=$ledCount
 # set working dir
 WORKDIR /app
 
-# install Python dependencies
-COPY ./gpio-service/requirements.txt ./
-RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
-
 # copy all the files to the container
-COPY ./gpio-service/* ./
+COPY ./gpio-service /app
+
+# install Python dependencies
+RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 # define the port number the container should expose
 EXPOSE $port
