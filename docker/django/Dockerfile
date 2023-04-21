@@ -18,3 +18,4 @@ COPY ./docker/django/wsgi-entrypoint.sh /app
 # upgrade pip & install dependencies
 COPY ./web/requirements.txt ./
 RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
+

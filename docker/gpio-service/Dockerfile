@@ -8,16 +8,6 @@ ENV PYTHONUNBUFFERED 1
 RUN apt update -y && apt-get install -y g++ gcc
 RUN pip install --default-timeout=1000 --upgrade pip
 
-# set working dir
-WORKDIR /app
-
-# install Python dependencies
-COPY ./gpio-service/requirements.txt ./
-RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
-
-# copy all the files to the container
-COPY ./gpio-service/ ./
-
 # setting up arguments
 ARG port=9000
 ARG pin=18
