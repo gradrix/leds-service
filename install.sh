@@ -165,8 +165,8 @@ After=network.target docker.service
 WorkingDirectory=$currentDir
 Type=simple
 Restart=always
-ExecStart=/usr/local/bin/docker-compose up --remove-orphans
-ExecStop=/usr/local/bin/docker-compose down --remove-orphans
+ExecStart=/bin/docker-compose up --remove-orphans
+ExecStop=/bin/docker-compose down --remove-orphans
 
 [Install]
 WantedBy=multi-user.target

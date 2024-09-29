@@ -11,5 +11,5 @@ ledCount = int(os.environ.get("LED_COUNT", default=100))
 
 leds = NeopixelWrapper(pinInt, ledCount)
 controller = Controller(leds)
-service = LedService("0.0.0.0", port, controller)
+service = LedService(port, controller)
 service.start()

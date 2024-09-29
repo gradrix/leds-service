@@ -20,7 +20,7 @@ settings.isOn = True
 
 controller = Controller(leds, settings)
 
-ledSvc = LedService("localhost", "9001", controller)
+ledSvc = LedService("9001", controller)
 thread = threading.Thread(target=ledSvc.start, args=())
 leds.start()
 thread.start()

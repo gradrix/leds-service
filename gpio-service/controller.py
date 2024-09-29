@@ -24,41 +24,37 @@ class Controller():
     # -----------------------------
     # Making led setting changes
     # -----------------------------
-    def change(self, command):
-        value = None
-        #Brightness
-        if (command.find("B:") != -1):
-            value = command.replace("B:", "")
-            if (int(value) > 100):
-              value = 100
-            self.settings.brightness = int(value)
-            self.leds.changeBrightness(self.settings.brightness)
-        #Switch ON/OFF
-        elif (command.find("O:") != -1):
-            value = command.replace("O:", "")
-            if (value == "0"):
-                self.settings.isOn = False
-                self.leds.clear(True)
-            else:
-                self.settings.isOn = True
-        #Mode
-        elif (command.find("M:") != -1):
-            value = command.replace("M:", "")
-            self.repo.changeMode(int(value), True)
-        #Toggle
-        elif (command.find("T:") != -1):
-            value = command.replace("T:", "")
-            self.settings.toggle = int(value)
-        #Speed
-        elif (command.find("S:") != -1):
-            value = command.replace("S:", "")
-            self.settings.speed = int(value)
-        #Color
-        elif (command.find("C:") != -1):
-            value = command.replace("C:", "").strip()
-            self.settings.color = value
-            self.repo.reinitializeLedProgram()
-        
+    def changeOnOff(self, value):
+        self.settings.isOn = value
+        if (value == False):
+            self.leds.clear(True)
+        self.settings.saveToFile()
+        return self.settings
+    
+    def changeBrightness(self, value):
+        self.settings.brightness = value
+        self.leds.changeBrightness(self.settings.brightness)
+        self.settings.saveToFile()
+        return self.settings
+    
+    def changeMode(self, value):
+        self.repo.changeMode(value, True)
+        self.settings.saveToFile()
+        return self.settings
+    
+    def changeToggleValue(self, value):
+        self.settings.toggle = value
+        self.settings.saveToFile()
+        return self.settings
+    
+    def changeSpeed(self, value):
+        self.settings.speed = value
+        self.settings.saveToFile()
+        return self.settings
+    
+    def changeColor(self, value):
+        self.settings.color = value
+        self.repo.reinitializeLedProgram()
         self.settings.saveToFile()
         return self.settings
 
