@@ -1,6 +1,6 @@
 import time
-from settings import Settings
-from ledprogramrepository import LedProgramRepository
+from gpio_service.settings import Settings
+from gpio_service.ledprogramrepository import LedProgramRepository
 
 # -----------------------------
 # Controller which changes led behavour values based on received commands

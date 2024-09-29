@@ -1,8 +1,7 @@
 import random
-import time
 import datetime
-from common.color import Color
-from common.ledprogrambase import LedProgramBase
+from gpio_service.common.color import Color
+from gpio_service.common.ledprogrambase import LedProgramBase
 
 MIN_SIZE = 2
 MAX_SIZE = 6
@@ -17,7 +16,7 @@ class Colliders(LedProgramBase):
     #end
 
     #LedProgramBase implementition
-    modeIndex = 1
+    modeIndex = 2
     modeName = "Colliders"
     minSpeed = 0
     maxSpeed = 100

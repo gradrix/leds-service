@@ -1,10 +1,6 @@
-import datetime
-import time
-import sys
-import threading
-from common.ledsbase import LedsBase
-from common.color import Color
-from tests.ledLog import LedLog
+from gpio_service.common.ledsbase import LedsBase
+from gpio_service.common.color import Color
+from gpio_service.tests.ledLog import LedLog
 
 class LedsTestWrapper(LedsBase):
   

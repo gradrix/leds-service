@@ -22,7 +22,7 @@ ENV LED_COUNT=$ledCount
 WORKDIR /app
 
 # copy all the files to the container
-COPY ./gpio-service /app
+COPY ./gpio_service /app
 
 # install Python dependencies
 RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt

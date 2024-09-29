@@ -2,12 +2,11 @@ import curses
 import datetime
 import time
 import sys
-import threading
 from io import StringIO
-from common.ledsbase import LedsBase
-from common.color import Color
-from tests.terminalColorPrinter import get_print_rgb
-from tests.ledLog import LedLog
+from gpio_service.common.ledsbase import LedsBase
+from gpio_service.common.color import Color
+from gpio_service.tests.terminalColorPrinter import get_print_rgb
+from gpio_service.tests.ledLog import LedLog
 
 class LedsTestWrapper(LedsBase):
   
@@ -85,6 +84,8 @@ class LedsTestWrapper(LedsBase):
     return lines < maxY
 
   def show(self):
+    return
+
     if (not self.started):
       return
 

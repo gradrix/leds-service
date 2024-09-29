@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 ./gpio-service/test-console-leds-runner.py
+PYTHONPATH=./ python3 -m gpio_service.test_console_leds_runner

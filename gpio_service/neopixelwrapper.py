@@ -1,6 +1,6 @@
 from rpi_ws281x import Adafruit_NeoPixel
 import _rpi_ws281x as ws
-from common.ledsbase import LedsBase
+from gpio_service.common.ledsbase import LedsBase
 
 # LED strip configuration:
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)

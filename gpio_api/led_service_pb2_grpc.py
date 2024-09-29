@@ -4,7 +4,7 @@ import grpc
 import warnings
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-import led_service_pb2 as led__service__pb2
+from gpio_api import led_service_pb2 as gpio__api_dot_led__service__pb2
 
 GRPC_GENERATED_VERSION = '1.66.2'
 GRPC_VERSION = grpc.__version__
@@ -19,7 +19,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in led_service_pb2_grpc.py depends on'
+        + f' but the generated code in gpio_api/led_service_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,48 +36,48 @@ class LedControlStub(object):
             channel: A grpc.Channel.
         """
         self.GetStatus = channel.unary_unary(
-                '/LedControl/GetStatus',
+                '/gpio_api.LedControl/GetStatus',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=led__service__pb2.GetStatusResponse.FromString,
+                response_deserializer=gpio__api_dot_led__service__pb2.GetStatusResponse.FromString,
                 _registered_method=True)
         self.GetMode = channel.unary_unary(
-                '/LedControl/GetMode',
+                '/gpio_api.LedControl/GetMode',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=led__service__pb2.GetModeResponse.FromString,
+                response_deserializer=gpio__api_dot_led__service__pb2.GetModeResponse.FromString,
                 _registered_method=True)
         self.ResetSettings = channel.unary_unary(
-                '/LedControl/ResetSettings',
+                '/gpio_api.LedControl/ResetSettings',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ToogleOnOff = channel.unary_unary(
-                '/LedControl/ToogleOnOff',
-                request_serializer=led__service__pb2.ToogleOnOffRequest.SerializeToString,
+                '/gpio_api.LedControl/ToogleOnOff',
+                request_serializer=gpio__api_dot_led__service__pb2.ToogleOnOffRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ChangeBrightness = channel.unary_unary(
-                '/LedControl/ChangeBrightness',
-                request_serializer=led__service__pb2.ChangeBrightnessRequest.SerializeToString,
+                '/gpio_api.LedControl/ChangeBrightness',
+                request_serializer=gpio__api_dot_led__service__pb2.ChangeBrightnessRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ChangeMode = channel.unary_unary(
-                '/LedControl/ChangeMode',
-                request_serializer=led__service__pb2.ChangeModeRequest.SerializeToString,
+                '/gpio_api.LedControl/ChangeMode',
+                request_serializer=gpio__api_dot_led__service__pb2.ChangeModeRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ChangeToggleValue = channel.unary_unary(
-                '/LedControl/ChangeToggleValue',
-                request_serializer=led__service__pb2.ChangeToggleValueRequest.SerializeToString,
+                '/gpio_api.LedControl/ChangeToggleValue',
+                request_serializer=gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ChangeSpeed = channel.unary_unary(
-                '/LedControl/ChangeSpeed',
-                request_serializer=led__service__pb2.ChangeSpeedRequest.SerializeToString,
+                '/gpio_api.LedControl/ChangeSpeed',
+                request_serializer=gpio__api_dot_led__service__pb2.ChangeSpeedRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.ChangeColor = channel.unary_unary(
-                '/LedControl/ChangeColor',
-                request_serializer=led__service__pb2.ChangeColorRequest.SerializeToString,
+                '/gpio_api.LedControl/ChangeColor',
+                request_serializer=gpio__api_dot_led__service__pb2.ChangeColorRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
 
@@ -145,12 +145,12 @@ def add_LedControlServicer_to_server(servicer, server):
             'GetStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.GetStatus,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=led__service__pb2.GetStatusResponse.SerializeToString,
+                    response_serializer=gpio__api_dot_led__service__pb2.GetStatusResponse.SerializeToString,
             ),
             'GetMode': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMode,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=led__service__pb2.GetModeResponse.SerializeToString,
+                    response_serializer=gpio__api_dot_led__service__pb2.GetModeResponse.SerializeToString,
             ),
             'ResetSettings': grpc.unary_unary_rpc_method_handler(
                     servicer.ResetSettings,
@@ -159,39 +159,39 @@ def add_LedControlServicer_to_server(servicer, server):
             ),
             'ToogleOnOff': grpc.unary_unary_rpc_method_handler(
                     servicer.ToogleOnOff,
-                    request_deserializer=led__service__pb2.ToogleOnOffRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ToogleOnOffRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ChangeBrightness': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeBrightness,
-                    request_deserializer=led__service__pb2.ChangeBrightnessRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeBrightnessRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ChangeMode': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeMode,
-                    request_deserializer=led__service__pb2.ChangeModeRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeModeRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ChangeToggleValue': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeToggleValue,
-                    request_deserializer=led__service__pb2.ChangeToggleValueRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ChangeSpeed': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeSpeed,
-                    request_deserializer=led__service__pb2.ChangeSpeedRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeSpeedRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'ChangeColor': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeColor,
-                    request_deserializer=led__service__pb2.ChangeColorRequest.FromString,
+                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeColorRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'LedControl', rpc_method_handlers)
+            'gpio_api.LedControl', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('LedControl', rpc_method_handlers)
+    server.add_registered_method_handlers('gpio_api.LedControl', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -212,9 +212,9 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/GetStatus',
+            '/gpio_api.LedControl/GetStatus',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            led__service__pb2.GetStatusResponse.FromString,
+            gpio__api_dot_led__service__pb2.GetStatusResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -239,9 +239,9 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/GetMode',
+            '/gpio_api.LedControl/GetMode',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            led__service__pb2.GetModeResponse.FromString,
+            gpio__api_dot_led__service__pb2.GetModeResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -266,7 +266,7 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ResetSettings',
+            '/gpio_api.LedControl/ResetSettings',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
@@ -293,8 +293,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ToogleOnOff',
-            led__service__pb2.ToogleOnOffRequest.SerializeToString,
+            '/gpio_api.LedControl/ToogleOnOff',
+            gpio__api_dot_led__service__pb2.ToogleOnOffRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -320,8 +320,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ChangeBrightness',
-            led__service__pb2.ChangeBrightnessRequest.SerializeToString,
+            '/gpio_api.LedControl/ChangeBrightness',
+            gpio__api_dot_led__service__pb2.ChangeBrightnessRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -347,8 +347,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ChangeMode',
-            led__service__pb2.ChangeModeRequest.SerializeToString,
+            '/gpio_api.LedControl/ChangeMode',
+            gpio__api_dot_led__service__pb2.ChangeModeRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -374,8 +374,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ChangeToggleValue',
-            led__service__pb2.ChangeToggleValueRequest.SerializeToString,
+            '/gpio_api.LedControl/ChangeToggleValue',
+            gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -401,8 +401,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ChangeSpeed',
-            led__service__pb2.ChangeSpeedRequest.SerializeToString,
+            '/gpio_api.LedControl/ChangeSpeed',
+            gpio__api_dot_led__service__pb2.ChangeSpeedRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
@@ -428,8 +428,8 @@ class LedControl(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/LedControl/ChangeColor',
-            led__service__pb2.ChangeColorRequest.SerializeToString,
+            '/gpio_api.LedControl/ChangeColor',
+            gpio__api_dot_led__service__pb2.ChangeColorRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,

@@ -3,8 +3,8 @@ import inspect
 import os
 import glob
 from abc import ABC
-from common.ledprogrambase import LedProgramBase
-from layoutsettings import LayoutSettings
+from gpio_service.common.ledprogrambase import LedProgramBase
+from gpio_service.layoutsettings import LayoutSettings
 
 LED_PROGRAMS_DIR = "ledprograms"
 
@@ -48,7 +48,7 @@ class LedProgramRepository:
   # Changes led program
   # -----------------------------
   def changeMode(self, newMode, setProgram = False):
-    mode = 0
+    mode = 1
     if (self.settings.mode is not None and newMode is not None):      
       isNext = True if self.settings.mode < newMode else False
       if (isNext):
@@ -102,7 +102,7 @@ class LedProgramRepository:
     programTypes = []
     currentDir = os.path.dirname(os.path.abspath(__file__))
     dirPath = os.path.join(currentDir, directoryPath)
-    packageName = os.path.basename(directoryPath)
+    packageName = "gpio_service." + os.path.basename(directoryPath)
 
     # -----------------------------
     # Iterate all python files within that directory

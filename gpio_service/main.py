@@ -1,8 +1,8 @@
 #!python3
 import os
-from neopixelwrapper import NeopixelWrapper
-from controller import Controller
-from ledservice import LedService
+from gpio_service.neopixelwrapper import NeopixelWrapper
+from gpio_service.controller import Controller
+from gpio_service.ledservice import LedService
 
 #Start service
 port = int(os.environ.get("LED_PORT", default=9000))

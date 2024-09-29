@@ -1,9 +1,9 @@
 import grpc
 from concurrent import futures
 
-import api.led_service_pb2
-import api.led_service_pb2_grpc
-from ledcontrolservicer import LedControlServicer
+import gpio_api.led_service_pb2
+import gpio_api.led_service_pb2_grpc
+from gpio_service.ledcontrolservicer import LedControlServicer
 
 # -----------------------------
 # Main program entry point
@@ -19,8 +19,7 @@ class LedService:
     # -----------------------------
     def start(self):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=3))
-        api.led_service_pb2_grpc.add_LedControlServicer_to_server(LedControlServicer(self.controller), server)
-
+        gpio_api.led_service_pb2_grpc.add_LedControlServicer_to_server(LedControlServicer(self.controller), server)
 
         print("Starting gRPC server on port "+str(self.port)+"...")
         server.add_insecure_port('[::]:'+str(self.port))

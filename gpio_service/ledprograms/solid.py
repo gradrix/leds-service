@@ -1,6 +1,6 @@
 import time
-from common.ledprogrambase import LedProgramBase
-from common.color import Color
+from gpio_service.common.ledprogrambase import LedProgramBase
+from gpio_service.common.color import Color
 
 class Solid(LedProgramBase):
 
@@ -11,7 +11,7 @@ class Solid(LedProgramBase):
     #end
 
     #LedProgramBase implementation
-    modeIndex = 0
+    modeIndex = 1
     modeName = "Solid"
     minSpeed = 0
     maxSpeed = 100

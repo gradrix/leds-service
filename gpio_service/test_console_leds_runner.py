@@ -1,14 +1,28 @@
 #!python3
 
 import threading
+import curses
 import os
 import sys
 from gpio_service.ledservice import LedService
 from gpio_service.controller import Controller
 from gpio_service.settings import Settings
-from gpio_service.tests.ledstestwrapper import LedsTestWrapper
+from gpio_service.tests.ledstestwrappercli import LedsTestWrapper
 
 LED_COUNT = 360
+
+def cursesWrapper(window):
+    #Turn off cursor blinking
+    curses.cbreak()
+    curses.noecho()
+    curses.curs_set(0)
+    curses.start_color()
+    curses.use_default_colors()
+    for i in range(0, curses.COLORS):
+      curses.init_pair(i + 1, i, -1)
+
+# try:
+#curses.wrapper(cursesWrapper)
 
 leds = LedsTestWrapper()
 leds.initialize(LED_COUNT)
@@ -24,3 +38,13 @@ ledSvc = LedService("9001", controller)
 thread = threading.Thread(target=ledSvc.start, args=())
 leds.start()
 thread.start()
+
+# except:
+#   curses.endwin()
+#   os.system('reset')
+#   sys.exit()
+
+# finally:
+#   curses.endwin()
+#   os.system('reset')
+#   sys.exit()

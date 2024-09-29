@@ -1,6 +1,6 @@
 import time
-from common.color import Color
-from common.ledprogrambase import LedProgramBase
+from gpio_service.common.color import Color
+from gpio_service.common.ledprogrambase import LedProgramBase
 
 TH = 3
 
@@ -13,7 +13,7 @@ class Rainbow(LedProgramBase):
     #end
 
     #LedProgramBase implementation
-    modeIndex = 2
+    modeIndex = 3
     modeName = "Rainbow"
     minSpeed = 20
     maxSpeed = 200

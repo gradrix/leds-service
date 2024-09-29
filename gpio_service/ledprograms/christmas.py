@@ -1,4 +1,4 @@
-from common.ledprogrambase import LedProgramBase
+from gpio_service.common.ledprogrambase import LedProgramBase
 
 class Christmas(LedProgramBase):
 
@@ -9,7 +9,7 @@ class Christmas(LedProgramBase):
   #end
 
   #LedProgramBase implementation
-  modeIndex = 3
+  modeIndex = 4
   modeName = "Christmas"
   minSpeed = 0
   maxSpeed = 100

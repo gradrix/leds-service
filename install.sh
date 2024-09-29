@@ -135,7 +135,7 @@ installDockerContainers()
         fi
 
         echo "Building image: gradrix/${name}-${instance}..."
-        sudo docker build -t gradrix/${name}-${instance} --build-arg pin=${pin} --build-arg port=${port} --build-arg ledCount=${ledCount} -f ./docker/gpio-service/Dockerfile .
+        sudo docker build -t gradrix/${name}-${instance} --build-arg pin=${pin} --build-arg port=${port} --build-arg ledCount=${ledCount} -f ./docker/gpio_service/Dockerfile .
 
         echo "Creating and running cointainer once..."
         docker run --name ${name}-${instance} -it --device /dev/gpiomem -p ${port}:${port} --privileged -d --restart unless-stopped --network ${name}-network gradrix/${name}-${instance}

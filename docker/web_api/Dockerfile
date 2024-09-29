@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV FLASK_APP=app.py
 
 # Copy the rest of your application code to the container
+COPY ./gpio_api ./gpio_api
 COPY ./api/web .
 
 # Expose the port that the app runs on

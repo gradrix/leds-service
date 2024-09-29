@@ -8,7 +8,7 @@ class Settings:
     def loadDefaults(self):
         self.brightness = 0
         self.isOn = None
-        self.mode = 0
+        self.mode = 1
         self.toggle = 0
         self.speed = 0
         self.color = ""
@@ -46,7 +46,7 @@ class Settings:
             print("Error while loading saved data: "+str(e))
             self.brightness = 2
             self.isOn = True
-            self.mode = 0
+            self.mode = 1
             self.toggle = 0
             self.speed = 4
             self.color = ""               
