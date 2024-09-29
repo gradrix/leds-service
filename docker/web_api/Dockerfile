@@ -5,7 +5,7 @@ FROM python:3-slim-buster
 WORKDIR /app
 
 # Copy the requirements.txt file to the container
-COPY ./api/requirements.txt .
+COPY ./web_api/requirements.txt .
 
 # Install the required packages
 RUN pip install --no-cache-dir -r requirements.txt
@@ -14,10 +14,10 @@ ENV FLASK_APP=app.py
 
 # Copy the rest of your application code to the container
 COPY ./gpio_api ./gpio_api
-COPY ./api/web .
+COPY ./web_api .
 
 # Expose the port that the app runs on
-EXPOSE 8080
+EXPOSE 80
 
 # Command to run the Flask app using Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:80", "app:app"]

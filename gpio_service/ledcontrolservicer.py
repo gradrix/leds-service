@@ -9,8 +9,6 @@ class LedControlServicer(gpio_api.led_service_pb2_grpc.LedControlServicer):
         self.controller = controller
 
     def GetStatus(self, request, context):
-        print("GetStatus called", flush=True)
-
         return gpio_api.led_service_pb2.GetStatusResponse(
             brightness=self.controller.settings.brightness,
             speed=self.controller.settings.speed,
@@ -23,7 +21,6 @@ class LedControlServicer(gpio_api.led_service_pb2_grpc.LedControlServicer):
     def GetMode(self, request, context):
         layout = self.controller.repo.getModeLayout()
         modes=[gpio_api.led_service_pb2.Mode(id=mode[0], name=mode[1]) for mode in layout.modes]
-        print(modes, flush=True)
         return gpio_api.led_service_pb2.GetModeResponse(
             index=layout.modeIndex,
             min_speed=layout.minSpeed,

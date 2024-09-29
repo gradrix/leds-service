@@ -84,8 +84,6 @@ class LedsTestWrapper(LedsBase):
     return lines < maxY
 
   def show(self):
-    return
-
     if (not self.started):
       return
 
@@ -144,6 +142,6 @@ class LedsTestWrapper(LedsBase):
       #   pass
 
     self.sc.refresh()
-    #self.sc.erase() 
+    self.sc.erase() 
     self.sc.clear()
     time.sleep(0.1)

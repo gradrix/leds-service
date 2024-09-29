@@ -41,5 +41,7 @@ class Rainbow(LedProgramBase):
         for j in range(256*iterations):
             for i in range(self.leds.count()):
                 self.leds[i] = self.wheel((i+j) & 255).toRGB()
+                if (self.settings.mode != self.modeIndex):
+                    return
             self.leds.refresh()
             time.sleep(1 / (self.settings.speed))

@@ -1,3 +1,2 @@
-rpi_ws281x 
-sty
-zmq
+rpi_ws281x
+grpcio-tools

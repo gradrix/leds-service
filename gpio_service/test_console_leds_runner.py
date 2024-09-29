@@ -21,30 +21,31 @@ def cursesWrapper(window):
     for i in range(0, curses.COLORS):
       curses.init_pair(i + 1, i, -1)
 
-# try:
-#curses.wrapper(cursesWrapper)
+try:
+  curses.wrapper(cursesWrapper)
 
-leds = LedsTestWrapper()
-leds.initialize(LED_COUNT)
+  leds = LedsTestWrapper()
+  leds.initialize(LED_COUNT)
 
-settings = Settings()
-settings.ledCount = LED_COUNT
-settings.openFromFile()
-settings.isOn = True
+  settings = Settings()
+  settings.ledCount = LED_COUNT
+  settings.openFromFile()
+  settings.isOn = True
 
-controller = Controller(leds, settings)
+  controller = Controller(leds, settings)
 
-ledSvc = LedService("9001", controller)
-thread = threading.Thread(target=ledSvc.start, args=())
-leds.start()
-thread.start()
+  ledSvc = LedService("9001", controller)
+  # thread = threading.Thread(target=ledSvc.start, args=())
+  # thread.start()
+  leds.start()
+  ledSvc.start()
 
-# except:
-#   curses.endwin()
-#   os.system('reset')
-#   sys.exit()
+except:
+  curses.endwin()
+  os.system('reset')
+  sys.exit()
 
-# finally:
-#   curses.endwin()
-#   os.system('reset')
-#   sys.exit()
+finally:
+  curses.endwin()
+  os.system('reset')
+  sys.exit()
