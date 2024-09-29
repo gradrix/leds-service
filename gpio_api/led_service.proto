@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service LedControl {
+  rpc GetStatus (google.protobuf.Empty) returns (GetStatusResponse);
+  rpc GetMode (google.protobuf.Empty) returns (GetModeResponse);
+
+  rpc ResetSettings (google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc ToogleOnOff (ToogleOnOffRequest) returns (google.protobuf.Empty);
+  rpc ChangeBrightness (ChangeBrightnessRequest) returns (google.protobuf.Empty);
+  rpc ChangeMode (ChangeModeRequest) returns (google.protobuf.Empty);
+  rpc ChangeToggleValue (ChangeToggleValueRequest) returns (google.protobuf.Empty);
+  rpc ChangeSpeed (ChangeSpeedRequest) returns (google.protobuf.Empty);
+  rpc ChangeColor (ChangeColorRequest) returns (google.protobuf.Empty);
+}
+
+message GetStatusResponse {
+  bool is_on = 1;
+  int32 brightness = 2;
+  int32 speed = 3;
+  int32 mode = 4;
+  int32 toggle = 5;
+  string color = 6;
+}
+
+message GetModeResponse {
+  string name = 1;
+  int32 index = 2;
+  int32 min_speed = 3;
+  int32 max_speed = 4;
+}
+
+message ToogleOnOffRequest {
+  bool is_on = 1;
+}
+
+message ChangeBrightnessRequest {
+  int32 new_brightness = 1;
+}
+
+message ChangeModeRequest {
+  int32 new_mode = 1;
+}
+
+message ChangeToggleValueRequest {
+  int32 new_toggle = 1;
+}
+
+message ChangeSpeedRequest {
+  int32 new_speed = 1;
+}
+
+message ChangeColorRequest {
+  string new_color = 1;
+}
