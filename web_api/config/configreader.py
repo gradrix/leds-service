@@ -27,8 +27,8 @@ class ConfigReader():
             for arg in args:
                 keyValuePair = arg.split("=")
                 if (len(keyValuePair) == 2):
-                    key = keyValuePair[0]
-                    value = keyValuePair[1]
+                    key = keyValuePair[0].strip()
+                    value = keyValuePair[1].strip()
                     
                     if (key == "pin"):
                         pin = value
@@ -37,7 +37,7 @@ class ConfigReader():
                     elif (key == "ledCount"):
                         ledCount = value
 
-            if (pin != None and port != None and ledCount != None):
+            if (pin is not None and port is not None and ledCount is not None and pin != "" and port != "" and ledCount != ""):
                 result.append(GpioService(pin, port, ledCount))
 
         if (len(result) == 0):
