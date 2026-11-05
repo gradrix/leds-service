@@ -8,7 +8,7 @@ class Color:
         self.b = b
 
     def toRGB(self):
-        return (self.b, self.r, self.g)
+        return (self.r, self.g, self.b)
 
     @staticmethod
     def fromHex(hexStr):

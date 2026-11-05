@@ -1,32 +1,24 @@
-import time
-from gpio_service.common.ledprogrambase import LedProgramBase
 from gpio_service.common.color import Color
+from gpio_service.common.ledprogrambase import LedProgramBase
+
 
 class Solid(LedProgramBase):
+    modeIndex = 1
+    modeName = "Solid"
+    usesSpeed = False
+    usesColor = True
+    animated = False
 
-    #Constructor
     def __init__(self, settings, leds):
         super().__init__(settings, leds)
         self.initialize()
-    #end
-
-    #LedProgramBase implementation
-    modeIndex = 1
-    modeName = "Solid"
-    minSpeed = 0
-    maxSpeed = 100
 
     def initialize(self):
-        if (self.settings.color == ""):
-            self.color = Color.generateRandom()
-        
-    def show(self):
-        if (self.settings.color != ""):
-            self.color = Color.fromHex(self.settings.color)
+        self.randomColor = Color.generateRandom()
 
-        for i in range(self.leds.count()):
-            self.leds[i] = self.color.toRGB()
-    
-        self.leds.refresh()
-        time.sleep(1)
-    #end
+    def colorChanged(self):
+        self.initialize()
+
+    def render(self, seconds):
+        color = Color.fromHex(self.settings.color) if self.settings.color else self.randomColor
+        self.leds.fill(color.toRGB())

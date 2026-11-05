@@ -1,53 +1,70 @@
+import os
 import pickle
 
-class Settings: 
+from gpio_service.common.brightness import migrateLinearBrightness
+from gpio_service.common.ledprogrambase import SPEED_DEFAULT
+
+STATE_FILE = os.environ.get("LEDS_STATE_FILE", "saved-data")
+STATE_VERSION = 2
+
+
+class Settings:
 
     def __init__(self):
         self.loadDefaults()
 
     def loadDefaults(self):
         self.brightness = 0
-        self.isOn = None
+        self.isOn = False
         self.mode = 1
-        self.toggle = 0
-        self.speed = 0
+        self.speeds = {}
         self.color = ""
-        self.ledCount = 0
+
+    @property
+    def speed(self):
+        return self.speeds.get(self.mode, SPEED_DEFAULT)
+
+    @speed.setter
+    def speed(self, value):
+        self.speeds[self.mode] = value
 
     def reset(self):
-        self.loadDefaults() 
+        self.loadDefaults()
         self.saveToFile()
-    
+
     def saveToFile(self):
+        temporary = STATE_FILE + ".tmp"
         try:
-            with open("saved-data", "wb") as fi:
-                settingsDict = {}
-                settingsDict["brightness"] = self.brightness
-                settingsDict["isOn"] = self.isOn
-                settingsDict["mode"] = self.mode
-                settingsDict["toggle"] = self.toggle
-                settingsDict["speed"] = self.speed
-                settingsDict["color"] = self.color
-                pickle.dump(settingsDict, fi, pickle.HIGHEST_PROTOCOL)
-        except Exception as e:
-            print("Error while trying to save led settings: "+str(e))
+            with open(temporary, "wb") as out:
+                pickle.dump({
+                    "version": STATE_VERSION,
+                    "brightness": self.brightness,
+                    "isOn": self.isOn,
+                    "mode": self.mode,
+                    "speeds": self.speeds,
+                    "color": self.color,
+                }, out, pickle.HIGHEST_PROTOCOL)
+            # A power cut mid-write must not cost the saved state.
+            os.replace(temporary, STATE_FILE)
+        except OSError as e:
+            print("Error while trying to save led settings: " + str(e))
 
     def openFromFile(self):
         try:
-            with open("saved-data", "rb") as inp:
-                loadedSettings = pickle.load(inp)
-                self.brightness = loadedSettings["brightness"]
-                self.isOn = loadedSettings["isOn"]
-                self.mode = loadedSettings["mode"]
-                self.toggle = loadedSettings["toggle"]
-                self.speed = loadedSettings["speed"]
-                self.color = loadedSettings["color"]
+            with open(STATE_FILE, "rb") as inp:
+                loaded = pickle.load(inp)
+            self.brightness = loaded["brightness"]
+            self.isOn = loaded["isOn"]
+            self.mode = loaded["mode"]
+            self.color = loaded["color"]
+            if loaded.get("version") == STATE_VERSION:
+                self.speeds = loaded["speeds"]
+            else:
+                # Version 1: linear brightness, one speed shared by programs that mostly ignored it.
+                self.brightness = migrateLinearBrightness(self.brightness)
+                self.speeds = {}
         except Exception as e:
-            print("Error while loading saved data: "+str(e))
-            self.brightness = 2
-            self.isOn = True
-            self.mode = 1
-            self.toggle = 0
-            self.speed = 4
-            self.color = ""               
+            print("Error while loading saved data: " + str(e))
+            self.loadDefaults()
+            self.brightness = 15
             self.saveToFile()

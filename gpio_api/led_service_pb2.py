@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1agpio_api/led_service.proto\x12\x08gpio_api\x1a\x1bgoogle/protobuf/empty.proto\"r\n\x11GetStatusResponse\x12\r\n\x05is_on\x18\x01 \x01(\x08\x12\x12\n\nbrightness\x18\x02 \x01(\x05\x12\r\n\x05speed\x18\x03 \x01(\x05\x12\x0c\n\x04mode\x18\x04 \x01(\x05\x12\x0e\n\x06toggle\x18\x05 \x01(\x05\x12\r\n\x05\x63olor\x18\x06 \x01(\t\" \n\x04Mode\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"e\n\x0fGetModeResponse\x12\r\n\x05index\x18\x01 \x01(\x05\x12\x11\n\tmin_speed\x18\x02 \x01(\x05\x12\x11\n\tmax_speed\x18\x03 \x01(\x05\x12\x1d\n\x05modes\x18\x04 \x03(\x0b\x32\x0e.gpio_api.Mode\"#\n\x12ToogleOnOffRequest\x12\r\n\x05is_on\x18\x01 \x01(\x08\"1\n\x17\x43hangeBrightnessRequest\x12\x16\n\x0enew_brightness\x18\x01 \x01(\x05\"%\n\x11\x43hangeModeRequest\x12\x10\n\x08new_mode\x18\x01 \x01(\x05\".\n\x18\x43hangeToggleValueRequest\x12\x12\n\nnew_toggle\x18\x01 \x01(\x05\"\'\n\x12\x43hangeSpeedRequest\x12\x11\n\tnew_speed\x18\x01 \x01(\x05\"\'\n\x12\x43hangeColorRequest\x12\x11\n\tnew_color\x18\x01 \x01(\t2\x91\x05\n\nLedControl\x12\x42\n\tGetStatus\x12\x16.google.protobuf.Empty\x1a\x1b.gpio_api.GetStatusResponse\"\x00\x12>\n\x07GetMode\x12\x16.google.protobuf.Empty\x1a\x19.gpio_api.GetModeResponse\"\x00\x12\x41\n\rResetSettings\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0bToogleOnOff\x12\x1c.gpio_api.ToogleOnOffRequest\x1a\x16.google.protobuf.Empty\"\x00\x12O\n\x10\x43hangeBrightness\x12!.gpio_api.ChangeBrightnessRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x43\n\nChangeMode\x12\x1b.gpio_api.ChangeModeRequest\x1a\x16.google.protobuf.Empty\"\x00\x12Q\n\x11\x43hangeToggleValue\x12\".gpio_api.ChangeToggleValueRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0b\x43hangeSpeed\x12\x1c.gpio_api.ChangeSpeedRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0b\x43hangeColor\x12\x1c.gpio_api.ChangeColorRequest\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1agpio_api/led_service.proto\x12\x08gpio_api\x1a\x1bgoogle/protobuf/empty.proto\"h\n\x11GetStatusResponse\x12\r\n\x05is_on\x18\x01 \x01(\x08\x12\x12\n\nbrightness\x18\x02 \x01(\x05\x12\r\n\x05speed\x18\x03 \x01(\x05\x12\x0c\n\x04mode\x18\x04 \x01(\x05\x12\r\n\x05\x63olor\x18\x06 \x01(\tJ\x04\x08\x05\x10\x06\"H\n\x04Mode\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nuses_speed\x18\x03 \x01(\x08\x12\x12\n\nuses_color\x18\x04 \x01(\x08\"e\n\x0fGetModeResponse\x12\r\n\x05index\x18\x01 \x01(\x05\x12\x11\n\tmin_speed\x18\x02 \x01(\x05\x12\x11\n\tmax_speed\x18\x03 \x01(\x05\x12\x1d\n\x05modes\x18\x04 \x03(\x0b\x32\x0e.gpio_api.Mode\"#\n\x12ToogleOnOffRequest\x12\r\n\x05is_on\x18\x01 \x01(\x08\"1\n\x17\x43hangeBrightnessRequest\x12\x16\n\x0enew_brightness\x18\x01 \x01(\x05\"%\n\x11\x43hangeModeRequest\x12\x10\n\x08new_mode\x18\x01 \x01(\x05\"\'\n\x12\x43hangeSpeedRequest\x12\x11\n\tnew_speed\x18\x01 \x01(\x05\"\'\n\x12\x43hangeColorRequest\x12\x11\n\tnew_color\x18\x01 \x01(\t\"&\n\x13StreamFramesRequest\x12\x0f\n\x07max_fps\x18\x01 \x01(\x05\"h\n\x08LedFrame\x12\x0e\n\x06pixels\x18\x01 \x01(\x0c\x12\r\n\x05level\x18\x02 \x01(\x05\x12\x10\n\x08sequence\x18\x03 \x01(\x03\x12+\n\x06status\x18\x04 \x01(\x0b\x32\x1b.gpio_api.GetStatusResponse2\x85\x05\n\nLedControl\x12\x42\n\tGetStatus\x12\x16.google.protobuf.Empty\x1a\x1b.gpio_api.GetStatusResponse\"\x00\x12>\n\x07GetMode\x12\x16.google.protobuf.Empty\x1a\x19.gpio_api.GetModeResponse\"\x00\x12\x41\n\rResetSettings\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0bToogleOnOff\x12\x1c.gpio_api.ToogleOnOffRequest\x1a\x16.google.protobuf.Empty\"\x00\x12O\n\x10\x43hangeBrightness\x12!.gpio_api.ChangeBrightnessRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x43\n\nChangeMode\x12\x1b.gpio_api.ChangeModeRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0b\x43hangeSpeed\x12\x1c.gpio_api.ChangeSpeedRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0b\x43hangeColor\x12\x1c.gpio_api.ChangeColorRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x45\n\x0cStreamFrames\x12\x1d.gpio_api.StreamFramesRequest\x1a\x12.gpio_api.LedFrame\"\x00\x30\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,23 +33,25 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'gpio_api.led_service_pb2', 
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_GETSTATUSRESPONSE']._serialized_start=69
-  _globals['_GETSTATUSRESPONSE']._serialized_end=183
-  _globals['_MODE']._serialized_start=185
-  _globals['_MODE']._serialized_end=217
-  _globals['_GETMODERESPONSE']._serialized_start=219
-  _globals['_GETMODERESPONSE']._serialized_end=320
-  _globals['_TOOGLEONOFFREQUEST']._serialized_start=322
-  _globals['_TOOGLEONOFFREQUEST']._serialized_end=357
-  _globals['_CHANGEBRIGHTNESSREQUEST']._serialized_start=359
-  _globals['_CHANGEBRIGHTNESSREQUEST']._serialized_end=408
-  _globals['_CHANGEMODEREQUEST']._serialized_start=410
-  _globals['_CHANGEMODEREQUEST']._serialized_end=447
-  _globals['_CHANGETOGGLEVALUEREQUEST']._serialized_start=449
-  _globals['_CHANGETOGGLEVALUEREQUEST']._serialized_end=495
-  _globals['_CHANGESPEEDREQUEST']._serialized_start=497
-  _globals['_CHANGESPEEDREQUEST']._serialized_end=536
-  _globals['_CHANGECOLORREQUEST']._serialized_start=538
-  _globals['_CHANGECOLORREQUEST']._serialized_end=577
-  _globals['_LEDCONTROL']._serialized_start=580
-  _globals['_LEDCONTROL']._serialized_end=1237
+  _globals['_GETSTATUSRESPONSE']._serialized_end=173
+  _globals['_MODE']._serialized_start=175
+  _globals['_MODE']._serialized_end=247
+  _globals['_GETMODERESPONSE']._serialized_start=249
+  _globals['_GETMODERESPONSE']._serialized_end=350
+  _globals['_TOOGLEONOFFREQUEST']._serialized_start=352
+  _globals['_TOOGLEONOFFREQUEST']._serialized_end=387
+  _globals['_CHANGEBRIGHTNESSREQUEST']._serialized_start=389
+  _globals['_CHANGEBRIGHTNESSREQUEST']._serialized_end=438
+  _globals['_CHANGEMODEREQUEST']._serialized_start=440
+  _globals['_CHANGEMODEREQUEST']._serialized_end=477
+  _globals['_CHANGESPEEDREQUEST']._serialized_start=479
+  _globals['_CHANGESPEEDREQUEST']._serialized_end=518
+  _globals['_CHANGECOLORREQUEST']._serialized_start=520
+  _globals['_CHANGECOLORREQUEST']._serialized_end=559
+  _globals['_STREAMFRAMESREQUEST']._serialized_start=561
+  _globals['_STREAMFRAMESREQUEST']._serialized_end=599
+  _globals['_LEDFRAME']._serialized_start=601
+  _globals['_LEDFRAME']._serialized_end=705
+  _globals['_LEDCONTROL']._serialized_start=708
+  _globals['_LEDCONTROL']._serialized_end=1353
 # @@protoc_insertion_point(module_scope)

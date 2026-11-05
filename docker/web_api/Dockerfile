@@ -1,23 +1,22 @@
-# Use the official Python image from the Docker Hub
-FROM python:3-slim-buster
+# ---- UI bundle (built once here so the Pi never runs Node) ----
+FROM node:22-bookworm-slim AS ui
+WORKDIR /ui
+COPY ./ui/package.json ./ui/package-lock.json ./
+RUN npm ci
+COPY ./ui .
+RUN npm test && npm run build
 
-# Set the working directory inside the container
+# ---- Flask API + static UI ----
+FROM python:3.11-slim-bookworm
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
-
-# Copy the requirements.txt file to the container
 COPY ./web_api/requirements.txt .
-
-# Install the required packages
 RUN pip install --no-cache-dir -r requirements.txt
-
-ENV FLASK_APP=app.py
-
-# Copy the rest of your application code to the container
 COPY ./gpio_api ./gpio_api
 COPY ./web_api .
-
-# Expose the port that the app runs on
+COPY --from=ui /ui/build ./frontend_build
+ENV GPIO_SERVICE_ADDRESS=gpio:9000
 EXPOSE 80
-
-# Command to run the Flask app using Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:80", "app:app"]
+# One process, many threads: every live viewer holds a thread for as long as it watches.
+# Keep-alive outlasts the 120 s idle timeout of Caddy in front, so a POST never meets a connection closing under it.
+CMD ["gunicorn", "-b", "0.0.0.0:80", "--worker-class", "gthread", "--workers", "1", "--threads", "12", "--keep-alive", "130", "--graceful-timeout", "3", "app:app"]

@@ -65,11 +65,6 @@ class LedControlStub(object):
                 request_serializer=gpio__api_dot_led__service__pb2.ChangeModeRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
-        self.ChangeToggleValue = channel.unary_unary(
-                '/gpio_api.LedControl/ChangeToggleValue',
-                request_serializer=gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                _registered_method=True)
         self.ChangeSpeed = channel.unary_unary(
                 '/gpio_api.LedControl/ChangeSpeed',
                 request_serializer=gpio__api_dot_led__service__pb2.ChangeSpeedRequest.SerializeToString,
@@ -79,6 +74,11 @@ class LedControlStub(object):
                 '/gpio_api.LedControl/ChangeColor',
                 request_serializer=gpio__api_dot_led__service__pb2.ChangeColorRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
+        self.StreamFrames = channel.unary_stream(
+                '/gpio_api.LedControl/StreamFrames',
+                request_serializer=gpio__api_dot_led__service__pb2.StreamFramesRequest.SerializeToString,
+                response_deserializer=gpio__api_dot_led__service__pb2.LedFrame.FromString,
                 _registered_method=True)
 
 
@@ -121,12 +121,6 @@ class LedControlServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ChangeToggleValue(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def ChangeSpeed(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -135,6 +129,13 @@ class LedControlServicer(object):
 
     def ChangeColor(self, request, context):
         """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamFrames(self, request, context):
+        """Live copy of the frames sent to the strip, for the web mirror.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -172,11 +173,6 @@ def add_LedControlServicer_to_server(servicer, server):
                     request_deserializer=gpio__api_dot_led__service__pb2.ChangeModeRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
-            'ChangeToggleValue': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChangeToggleValue,
-                    request_deserializer=gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
             'ChangeSpeed': grpc.unary_unary_rpc_method_handler(
                     servicer.ChangeSpeed,
                     request_deserializer=gpio__api_dot_led__service__pb2.ChangeSpeedRequest.FromString,
@@ -186,6 +182,11 @@ def add_LedControlServicer_to_server(servicer, server):
                     servicer.ChangeColor,
                     request_deserializer=gpio__api_dot_led__service__pb2.ChangeColorRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'StreamFrames': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamFrames,
+                    request_deserializer=gpio__api_dot_led__service__pb2.StreamFramesRequest.FromString,
+                    response_serializer=gpio__api_dot_led__service__pb2.LedFrame.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -361,33 +362,6 @@ class LedControl(object):
             _registered_method=True)
 
     @staticmethod
-    def ChangeToggleValue(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/gpio_api.LedControl/ChangeToggleValue',
-            gpio__api_dot_led__service__pb2.ChangeToggleValueRequest.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def ChangeSpeed(request,
             target,
             options=(),
@@ -431,6 +405,33 @@ class LedControl(object):
             '/gpio_api.LedControl/ChangeColor',
             gpio__api_dot_led__service__pb2.ChangeColorRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StreamFrames(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/gpio_api.LedControl/StreamFrames',
+            gpio__api_dot_led__service__pb2.StreamFramesRequest.SerializeToString,
+            gpio__api_dot_led__service__pb2.LedFrame.FromString,
             options,
             channel_credentials,
             insecure,

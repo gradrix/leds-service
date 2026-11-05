@@ -67,12 +67,12 @@ def test_fresh_fallback_objects():
     assert c1.b == 255
 
 
-def test_existing_channel_order():
+def test_to_rgb_is_true_rgb():
     c = Color(10, 20, 30)
     assert c.r == 10
     assert c.g == 20
     assert c.b == 30
-    assert c.toRGB() == (30, 10, 20)
+    assert c.toRGB() == (10, 20, 30)
 
 
 def test_generate_random():

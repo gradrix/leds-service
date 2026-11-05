@@ -1,2 +1,3 @@
-rpi_ws281x
-grpcio-tools
+rpi_ws281x==5.0.0
+grpcio==1.66.2
+protobuf==5.28.3

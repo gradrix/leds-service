@@ -1,37 +1,20 @@
-FROM python:3-slim-buster
+FROM python:3.11-slim-bookworm
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
-# OS deps
-RUN apt update -y && apt-get install -y g++ gcc
-
-# Copy the requirements file to the container
+# rpi_ws281x builds its C extension from source.
 COPY ./gpio_service/requirements.txt .
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get purge -y gcc libc6-dev && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
-# install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Strip configuration; override at run time.
+ENV LED_PORT=9000 LED_PIN=18 LED_COUNT=360 LEDS_STATE_FILE=/state/saved-data
 
-# setting up arguments
-ARG port=9001
-ARG pin=18
-ARG ledCount=360
-
-# setting up env variables
-ENV LED_PORT=$port
-ENV LED_PIN=$pin
-ENV LED_COUNT=$ledCount
-
-# set working dir
 WORKDIR /app
-
-# copy all the files to the container
 COPY ./gpio_api ./gpio_api
 COPY ./gpio_service ./gpio_service
 
-# define the port number the container should expose
-EXPOSE $port
-
-# run the command
-CMD [ "python", "-m", "gpio_service.main" ]
+EXPOSE 9000
+CMD ["python", "-m", "gpio_service.main"]

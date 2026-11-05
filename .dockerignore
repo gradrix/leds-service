@@ -2,9 +2,9 @@ saved-data
 **/Dockerfile
 .dockerignore
 .gitignore
-node_modules
+**/node_modules
 frontend-build
-build
+**/build
 react-build
 README.md
 **/*.pyc

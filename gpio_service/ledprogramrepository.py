@@ -2,143 +2,56 @@ import importlib
 import inspect
 import os
 import glob
-from abc import ABC
+
 from gpio_service.common.ledprogrambase import LedProgramBase
-from gpio_service.layoutsettings import LayoutSettings
 
 LED_PROGRAMS_DIR = "ledprograms"
 
-# -----------------------------
-# Led program repository responsible for loading/changing between different led programs
-# -----------------------------
+
+class ModeLayout:
+    def __init__(self, modeIndex, modes):
+        self.modeIndex = modeIndex
+        self.minSpeed = 0
+        self.maxSpeed = 100
+        self.modes = modes
+
+
 class LedProgramRepository:
+    """Finds the programs in ledprograms/ and tracks the current one."""
 
-  def __init__(self, settings, leds):
-    self.programs = {}
-    self.settings = settings
-    
-    programTypes = self.importFromFolder(LED_PROGRAMS_DIR, LedProgramBase)
-    print("Initializing Led Programs: ", end = "")
-    for i, programType in enumerate(programTypes):
-      programName = programType.__name__
-      if (i == len(programTypes) - 1):
-        print(programName, end = "")
-      else:
-        print(programName, end = ", ")
-      self.add(programType(settings, leds))
-    print(" <- Success!")  
+    def __init__(self, settings, leds):
+        self.settings = settings
+        programs = [programType(settings, leds) for programType in self.findProgramTypes()]
+        indexes = [program.modeIndex for program in programs]
+        if len(set(indexes)) != len(indexes):
+            raise ValueError("Two led programs share a modeIndex: " + str(sorted(indexes)))
+        self.programs = {program.modeIndex: program for program in sorted(programs, key=lambda p: p.modeIndex)}
+        print("Led programs: " + ", ".join(p.modeName for p in self.programs.values()))
 
-    programList = list(self.programs.items())
-    programList.sort()
-    self.programs = dict(programList)
-    if (self.settings.mode not in self.programs):
-      self.changeMode(self.settings.mode)
-    self.currentProgram = self.programs[self.settings.mode]
-    #Log
-    #print("Settings: isOn:"+str(self.settings.isOn)+" mode:"+str(self.settings.mode)+" toggle:"
-    #+str(self.settings.toggle)+" speed:"+str(self.settings.speed)+" brightness:"+str(self.settings.brightness)+" ledCount:"+str(self.settings.ledCount))
+        if settings.mode not in self.programs:
+            settings.mode = min(self.programs)
+        self.currentProgram = self.programs[settings.mode]
 
-  # -----------------------------
-  # Runs current program frame
-  # -----------------------------
-  def show(self):
-    self.currentProgram.show()
+    def changeMode(self, newMode):
+        """Returns False when no such program exists."""
+        if newMode not in self.programs:
+            return False
+        self.settings.mode = newMode
+        self.currentProgram = self.programs[newMode]
+        return True
 
-  # -----------------------------
-  # Changes led program
-  # -----------------------------
-  def changeMode(self, newMode, setProgram = False):
-    mode = 1
-    if (self.settings.mode is not None and newMode is not None):      
-      isNext = True if self.settings.mode < newMode else False
-      if (isNext):
-        for i in range(newMode, max(self.programs, key=int) + 1):
-          if (i in self.programs):
-            mode = i
-            break
-      else:
-        for i in range(newMode, min(self.programs, key=int), -1):
-          if (i in self.programs):
-            mode = i
-            break
-    self.settings.mode = mode
-    if (setProgram):
-      self.currentProgram = self.programs[self.settings.mode]
-      self.reinitializeLedProgram()
+    def getModeLayout(self):
+        return ModeLayout(self.currentProgram.modeIndex, list(self.programs.values()))
 
-  # -----------------------------
-  # Reinitializes led program
-  # -----------------------------
-  def reinitializeLedProgram(self):
-    self.currentProgram.initialize()
-
-  # -----------------------------
-  # Gets current led program layout settings
-  # -----------------------------
-  def getModeLayout(self):
-    modeLayout = LayoutSettings()
-    modeLayout.modeIndex = self.currentProgram.modeIndex
-    modeLayout.minSpeed = self.currentProgram.minSpeed
-    modeLayout.maxSpeed = self.currentProgram.maxSpeed
-    modeLayout.modes = []
-
-    for i in self.programs:
-      modeLayout.modes.append((self.programs[i].modeIndex, self.programs[i].modeName))
-
-    return modeLayout
-
-  # -----------------------------
-  # Adds led program into repository
-  # -----------------------------
-  def add(self, ledProgram):
-    if (ledProgram.modeIndex in self.programs):
-      raise ValueError("Error. LedProgram of index '"+str(ledProgram.modeIndex)+"' already exists in LedProgramRepository")
-    self.programs[ledProgram.modeIndex] = ledProgram
-    
-  # -----------------------------
-  # Imports led programs which implements LedProgramBase from ledprograms folder 
-  # -----------------------------
-  def importFromFolder(self, directoryPath, baseClass=None, filterAbstract=True):    
-    programTypes = []
-    currentDir = os.path.dirname(os.path.abspath(__file__))
-    dirPath = os.path.join(currentDir, directoryPath)
-    packageName = "gpio_service." + os.path.basename(directoryPath)
-
-    # -----------------------------
-    # Iterate all python files within that directory
-    filePaths = glob.glob(os.path.join(dirPath, "*.py"))
-    for filePath in filePaths:
-      programFileName = os.path.basename(filePath)
-
-      className = os.path.splitext(programFileName)[0]
-
-      if className.startswith("__"):
-        continue
-
-      # -----------------------------
-      # Import python file
-      module = importlib.import_module("." + className, package=packageName)
-
-      # -----------------------------
-      # Iterate items inside imported python file
-      for item in dir(module):
-        value = getattr(module, item)
-        if not value:
-          continue
-
-        if not inspect.isclass(value):
-          continue
-
-        if filterAbstract and inspect.isabstract(value):
-          continue
-
-        if baseClass is not None:
-          if type(value) != type(baseClass):
-            continue
-          
-        if value.__name__ == ABC.__name__:
-          continue
-        
-        programTypes.append(value)
-
-    return programTypes
+    def findProgramTypes(self):
+        directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), LED_PROGRAMS_DIR)
+        found = []
+        for path in glob.glob(os.path.join(directory, "*.py")):
+            name = os.path.splitext(os.path.basename(path))[0]
+            if name.startswith("__"):
+                continue
+            module = importlib.import_module("gpio_service." + LED_PROGRAMS_DIR + "." + name)
+            for _, value in inspect.getmembers(module, inspect.isclass):
+                if issubclass(value, LedProgramBase) and not inspect.isabstract(value):
+                    found.append(value)
+        return found

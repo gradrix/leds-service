@@ -12,9 +12,11 @@ service LedControl {
   rpc ToogleOnOff (ToogleOnOffRequest) returns (google.protobuf.Empty) {}
   rpc ChangeBrightness (ChangeBrightnessRequest) returns (google.protobuf.Empty) {}
   rpc ChangeMode (ChangeModeRequest) returns (google.protobuf.Empty) {}
-  rpc ChangeToggleValue (ChangeToggleValueRequest) returns (google.protobuf.Empty) {}
   rpc ChangeSpeed (ChangeSpeedRequest) returns (google.protobuf.Empty) {}
   rpc ChangeColor (ChangeColorRequest) returns (google.protobuf.Empty) {}
+
+  // Live copy of the frames sent to the strip, for the web mirror.
+  rpc StreamFrames (StreamFramesRequest) returns (stream LedFrame) {}
 }
 
 message GetStatusResponse {
@@ -22,13 +24,15 @@ message GetStatusResponse {
   int32 brightness = 2;
   int32 speed = 3;
   int32 mode = 4;
-  int32 toggle = 5;
+  reserved 5;
   string color = 6;
 }
 
 message Mode {
   int32 id = 1;
   string name = 2;
+  bool uses_speed = 3;
+  bool uses_color = 4;
 }
 
 message GetModeResponse {
@@ -50,14 +54,21 @@ message ChangeModeRequest {
   int32 new_mode = 1;
 }
 
-message ChangeToggleValueRequest {
-  int32 new_toggle = 1;
-}
-
 message ChangeSpeedRequest {
   int32 new_speed = 1;
 }
 
 message ChangeColorRequest {
   string new_color = 1;
+}
+
+message StreamFramesRequest {
+  int32 max_fps = 1;
+}
+
+message LedFrame {
+  bytes pixels = 1;  // r,g,b per LED, before brightness
+  int32 level = 2;   // strip brightness, 0-255
+  int64 sequence = 3;
+  GetStatusResponse status = 4;
 }
