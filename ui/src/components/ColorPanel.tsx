@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
-import { hexToHueSat, HueSat, hueSatToHex } from "../color";
+import { hexToHueSat, HueSat, hueSatToHex, SWATCHES } from "../color";
 import { Slider } from "./Slider";
-
-const SWATCHES = [
-  ["Warm white", "ffb46b"],
-  ["Cool white", "ffffff"],
-  ["Amber", "ff8a00"],
-  ["Red", "ff1a1a"],
-  ["Pink", "ff2d95"],
-  ["Violet", "8a2bff"],
-  ["Blue", "1f5cff"],
-  ["Cyan", "00d5ff"],
-  ["Green", "1fe06a"],
-];
 
 const HUE_TRACK = "linear-gradient(90deg,#f00,#ff0 16.7%,#0f0 33.3%,#0ff 50%,#00f 66.7%,#f0f 83.3%,#f00)";
 

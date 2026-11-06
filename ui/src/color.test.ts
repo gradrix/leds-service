@@ -1,5 +1,5 @@
-import { expect, it } from "vitest";
-import { hexToHueSat, hueSatToHex, inkFor } from "./color";
+import { describe, expect, it } from "vitest";
+import { hexToHueSat, hueSatToHex, inkFor, SWATCHES } from "./color";
 
 it.each([
   ["ff0000", 0, 100],
@@ -19,4 +19,17 @@ it.each([
   ["00d5ff", "#101114"],
 ])("text on %s is %s", (hex, ink) => {
   expect(inkFor(hex)).toBe(ink);
+});
+
+describe("swatches", () => {
+  // A strip shows each channel at its linear value, so a stray channel that a screen hides stays visible.
+  it.each([
+    ["Red", 0],
+    ["Green", 1],
+    ["Blue", 2],
+  ])("%s lights only its own LED", (name, channel) => {
+    const hex = SWATCHES.find(([swatch]) => swatch === name)![1];
+    const bytes = [0, 2, 4].map((start) => parseInt(hex.slice(start, start + 2), 16));
+    expect(bytes).toEqual([0, 1, 2].map((i) => (i === channel ? 255 : 0)));
+  });
 });

@@ -49,3 +49,16 @@ export function hueSatToHex({ hue, saturation }: HueSat): string {
   };
   return channel(5) + channel(3) + channel(1);
 }
+
+/** LEDs show every channel at its linear value, so the primaries keep the other channels at zero. */
+export const SWATCHES = [
+  ["Warm white", "ffb46b"],
+  ["Cool white", "ffffff"],
+  ["Amber", "ff8a00"],
+  ["Red", "ff0000"],
+  ["Pink", "ff2d95"],
+  ["Violet", "8a2bff"],
+  ["Blue", "0000ff"],
+  ["Cyan", "00d5ff"],
+  ["Green", "00ff00"],
+];
