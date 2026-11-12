@@ -64,8 +64,8 @@ picture is an `.art-<name>` rule in `ui/src/styles.css`.
 Brightness is perceptual: the 0-255 strip level is `(percent/100)²`, so half way is a quarter of the
 power (`common/brightness.py`). State files from the old linear slider are converted once on load.
 
-The strip's chips take their bytes in blue, red, green order. That lives only in
-`neopixelwrapper.py`; everything else uses true r,g,b.
+The strip has WS2812 chips, which read each pixel as green, red, blue; `neopixelwrapper.py` asks
+rpi_ws281x for that order (`WS2811_STRIP_GRB`), so everything else uses true r,g,b.
 
 ## Run it
 

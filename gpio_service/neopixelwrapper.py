@@ -23,15 +23,14 @@ class NeopixelWrapper(LedsBase):
       raise ValueError("Incorrect pin value, only 10, 12, 13, 18, 19 or 21 are supported")
     self.ledCount = ledCount
     print("Initializing neopixel strip on pin " + str(pin) + " with " + str(ledCount) + " leds")
-    self.leds = Adafruit_NeoPixel(ledCount, pin, LED_FREQ_HZ, LED_DMA, False, 5, channel, ws.WS2811_STRIP_RGB)
+    self.leds = Adafruit_NeoPixel(ledCount, pin, LED_FREQ_HZ, LED_DMA, False, 5, channel, ws.WS2811_STRIP_GRB)
     self.leds.begin()
 
   def write(self, pixels, level):
     setPixel = self.leds.setPixelColorRGB
     for i in range(self.ledCount):
       offset = i * 3
-      # This strip's chips read the three bytes in blue, red, green order.
-      setPixel(i, pixels[offset + 2], pixels[offset], pixels[offset + 1])
+      setPixel(i, pixels[offset], pixels[offset + 1], pixels[offset + 2])
     self.leds.setBrightness(level)
     self.leds.show()
 
